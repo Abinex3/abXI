@@ -85,23 +85,24 @@ export default function HeroSection() {
        {/* ── HEADLINE with SplitText ── */}
 <div className="relative z-10 px-4 pt-2 pointer-events-none select-none">
 
-  {/* Line 1 */}
+  {/* Line 1: I TURN IDEAS INTO */}
   <div
-    style={{
-      fontFamily: "'Bebas Neue', sans-serif",
-      fontSize: "clamp(3rem, 11.5vw, 12rem)",
-      lineHeight: 0.88,
-    }}
-  >
+  style={{
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "18vw",  // tuned so "FROM ZERO TO" fills full width
+    fontWeight: 900,
+    lineHeight: 0.88,
+  }}
+>
     <SplitText
       tag="div"
-      text="I TURN IDEAS INTO PRODUCTS"
+      text="FROM ZERO TO"
       className="block whitespace-nowrap text-black uppercase"
       splitType="chars"
       delay={30}
-      duration={0.6}
+      duration={0.7}
       ease="power4.out"
-      from={{ opacity: 0, y: 80, skewY: 6 }}
+      from={{ opacity: 0, y: 100, skewY: 8 }}
       to={{ opacity: 1, y: 0, skewY: 0 }}
       threshold={0.1}
       rootMargin="0px"
@@ -109,37 +110,37 @@ export default function HeroSection() {
     />
   </div>
 
-  {/* Line 2 */}
-  <div
-    className="flex items-baseline"
-    style={{
-      fontFamily: "'Bebas Neue', sans-serif",
-      fontSize: "clamp(3rem, 11.5vw, 12rem)",
-      lineHeight: 0.88,
-    }}
-  >
+  {/* Line 2: PRODUCTS PEOPLE + Actually Use. */}
+<div
+  className="flex items-baseline"
+  style={{
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "18vw",  // same size so both lines match
+    fontWeight: 900,
+    lineHeight: 0.88,
+  }}
+>
     <SplitText
       tag="div"
-      text="PEOPLE"
+      text="SOMETHING"
       className="whitespace-nowrap text-black uppercase"
       splitType="chars"
-      delay={30}
-      duration={0.6}
+      delay={40}
+      duration={0.7}
       ease="power4.out"
-      from={{ opacity: 0, y: 80, skewY: 6 }}
+      from={{ opacity: 0, y: 100, skewY: 8 }}
       to={{ opacity: 1, y: 0, skewY: 0 }}
       threshold={0.1}
       rootMargin="0px"
       textAlign="left"
     />
 
-    {/* Accent word in its own sized wrapper */}
     <div
       style={{
         fontFamily: "'Caveat', cursive",
-        fontSize: "clamp(2.8rem, 11vw, 11.5rem)",
+        fontSize: "clamp(2.6rem, 9.5vw, 10rem)",
         color: "#e03a1e",
-        fontWeight: 700,
+       fontSize: "15vw",  
         fontStyle: "italic",
         lineHeight: 1,
         marginLeft: "0.15em",
@@ -147,13 +148,13 @@ export default function HeroSection() {
     >
       <SplitText
         tag="div"
-        text="Actually Use."
+        text="Real."
         className="whitespace-nowrap"
         splitType="chars"
-        delay={35}
-        duration={0.7}
+        delay={50}
+        duration={0.8}
         ease="power4.out"
-        from={{ opacity: 0, y: 60, rotate: -8 }}
+        from={{ opacity: 0, y: 60, rotate: -10 }}
         to={{ opacity: 1, y: 0, rotate: 0 }}
         threshold={0.1}
         rootMargin="0px"
@@ -193,13 +194,12 @@ export default function HeroSection() {
           }}
         >
           <p
-            className="max-w-xs text-sm leading-snug text-black/80"
-            style={{ fontFamily: "'Inter', sans-serif" }}
-          >
-            Most apps look good in demos. Mine work in production —
-            <br />built by a dev who's been on both sides of the deadline.
-          </p>
-
+  className="max-w-xs text-sm leading-snug text-black/80"
+  style={{ fontFamily: "'Inter', sans-serif" }}
+>
+  Every great product starts with zero.
+  <br />I close that gap — fast, clean, and built to last.
+</p>
           <span
             className="text-xs font-semibold tracking-widest text-black/70 pb-1"
             style={{ fontFamily: "'Inter', sans-serif" }}
