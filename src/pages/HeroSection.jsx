@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import IMG from "../assets/img.png";
-import Logo from "../assets/abxi-01.svg";
 import SplitText from "../components/SplitText";
 
 export default function HeroSection() {
@@ -42,130 +41,92 @@ export default function HeroSection() {
         background: "linear-gradient(to bottom, #e8e0d5 0%, #e8e0d5 40%, #e05a30 100%)",
       }}
     >
-      {/* ── NAVBAR — slides down on load ── */}
-      <nav
-        className="relative z-20 flex items-center justify-between px-8 py-6"
-        style={{
-          transform: ready ? "translateY(0)" : "translateY(-100%)",
-          opacity: ready ? 1 : 0,
-          transition: "transform 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease",
-        }}
-      >
-        <img src={Logo} alt="Logo" className="h-8 w-auto select-none" />
-
-        <ul className="hidden md:flex items-center gap-10">
-          {["PROJECTS", "MY STACK", "ABOUT"].map((item) => (
-            <li key={item}>
-              <a
-                href="#"
-                className="text-xs font-semibold tracking-widest text-black hover:opacity-60 transition-opacity"
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              >
-                {item}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <button
-          className="flex items-center gap-2 bg-black text-white text-xs font-bold tracking-widest px-5 py-3 hover:bg-neutral-800 transition-colors"
-          style={{ fontFamily: "'Inter', sans-serif" }}
-        >
-          <span className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0">
-            <img src={IMG} alt="Avatar" className="w-full h-full object-cover" />
-          </span>
-          HIRE ME
-        </button>
-      </nav>
-
       {/* ── HERO BODY ── */}
       <div className="relative flex-1 flex flex-col justify-between">
 
         {/* ── HEADLINE with SplitText ── */}
-       {/* ── HEADLINE with SplitText ── */}
-<div className="relative z-10 px-4 pt-2 pointer-events-none select-none">
+        <div className="relative z-10 px-4 pt-24 pointer-events-none select-none">
+          {/* pt-24 gives breathing room below the fixed global navbar */}
 
-  {/* Line 1: I TURN IDEAS INTO */}
-  <div
-  style={{
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "18vw",  // tuned so "FROM ZERO TO" fills full width
-    fontWeight: 900,
-    lineHeight: 0.88,
-  }}
->
-    <SplitText
-      tag="div"
-      text="FROM ZERO TO"
-      className="block whitespace-nowrap text-black uppercase"
-      splitType="chars"
-      delay={30}
-      duration={0.7}
-      ease="power4.out"
-      from={{ opacity: 0, y: 100, skewY: 8 }}
-      to={{ opacity: 1, y: 0, skewY: 0 }}
-      threshold={0.1}
-      rootMargin="0px"
-      textAlign="left"
-    />
-  </div>
+          {/* Line 1: FROM ZERO TO */}
+          <div
+            style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "18vw",
+              fontWeight: 900,
+              lineHeight: 0.88,
+            }}
+          >
+            <SplitText
+              tag="div"
+              text="FROM ZERO TO"
+              className="block whitespace-nowrap text-black uppercase"
+              splitType="chars"
+              delay={30}
+              duration={0.7}
+              ease="power4.out"
+              from={{ opacity: 0, y: 100, skewY: 8 }}
+              to={{ opacity: 1, y: 0, skewY: 0 }}
+              threshold={0.1}
+              rootMargin="0px"
+              textAlign="left"
+            />
+          </div>
 
-  {/* Line 2: PRODUCTS PEOPLE + Actually Use. */}
-<div
-  className="flex items-baseline"
-  style={{
-    fontFamily: "'Bebas Neue', sans-serif",
-    fontSize: "18vw",  // same size so both lines match
-    fontWeight: 900,
-    lineHeight: 0.88,
-  }}
->
-    <SplitText
-      tag="div"
-      text="SOMETHING"
-      className="whitespace-nowrap text-black uppercase"
-      splitType="chars"
-      delay={40}
-      duration={0.7}
-      ease="power4.out"
-      from={{ opacity: 0, y: 100, skewY: 8 }}
-      to={{ opacity: 1, y: 0, skewY: 0 }}
-      threshold={0.1}
-      rootMargin="0px"
-      textAlign="left"
-    />
+          {/* Line 2: SOMETHING + Real. */}
+          <div
+            className="flex items-baseline"
+            style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "18vw",
+              fontWeight: 900,
+              lineHeight: 0.88,
+            }}
+          >
+            <SplitText
+              tag="div"
+              text="SOMETHING"
+              className="whitespace-nowrap text-black uppercase"
+              splitType="chars"
+              delay={40}
+              duration={0.7}
+              ease="power4.out"
+              from={{ opacity: 0, y: 100, skewY: 8 }}
+              to={{ opacity: 1, y: 0, skewY: 0 }}
+              threshold={0.1}
+              rootMargin="0px"
+              textAlign="left"
+            />
 
-    <div
-      style={{
-        fontFamily: "'Caveat', cursive",
-        fontSize: "clamp(2.6rem, 9.5vw, 10rem)",
-        color: "#e03a1e",
-       fontSize: "15vw",  
-        fontStyle: "italic",
-        lineHeight: 1,
-        marginLeft: "0.15em",
-      }}
-    >
-      <SplitText
-        tag="div"
-        text="Real."
-        className="whitespace-nowrap"
-        splitType="chars"
-        delay={50}
-        duration={0.8}
-        ease="power4.out"
-        from={{ opacity: 0, y: 60, rotate: -10 }}
-        to={{ opacity: 1, y: 0, rotate: 0 }}
-        threshold={0.1}
-        rootMargin="0px"
-        textAlign="left"
-      />
-    </div>
-  </div>
+            <div
+              style={{
+                fontFamily: "'Caveat', cursive",
+                fontSize: "15vw",
+                color: "#e03a1e",
+                fontStyle: "italic",
+                lineHeight: 1,
+                marginLeft: "0.15em",
+              }}
+            >
+              <SplitText
+                tag="div"
+                text="Real."
+                className="whitespace-nowrap"
+                splitType="chars"
+                delay={50}
+                duration={0.8}
+                ease="power4.out"
+                from={{ opacity: 0, y: 60, rotate: -10 }}
+                to={{ opacity: 1, y: 0, rotate: 0 }}
+                threshold={0.1}
+                rootMargin="0px"
+                textAlign="left"
+              />
+            </div>
+          </div>
+        </div>
 
-</div>
-
-        {/* Portrait — always visible immediately */}
+        {/* Portrait */}
         <div
           className="hero-img absolute bottom-0 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
           style={{
@@ -184,7 +145,7 @@ export default function HeroSection() {
           />
         </div>
 
-        {/* Bottom bar — fades in last */}
+        {/* Bottom bar */}
         <div
           className="relative z-30 flex items-end justify-between px-8 pb-7"
           style={{
@@ -194,12 +155,12 @@ export default function HeroSection() {
           }}
         >
           <p
-  className="max-w-xs text-sm leading-snug text-black/80"
-  style={{ fontFamily: "'Inter', sans-serif" }}
->
-  Every great product starts with zero.
-  <br />I close that gap — fast, clean, and built to last.
-</p>
+            className="max-w-xs text-sm leading-snug text-black/80"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            Every great product starts with zero.
+            <br />I close that gap — fast, clean, and built to last.
+          </p>
           <span
             className="text-xs font-semibold tracking-widest text-black/70 pb-1"
             style={{ fontFamily: "'Inter', sans-serif" }}

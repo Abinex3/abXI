@@ -6,14 +6,16 @@ import About from "./pages/About";
 import WhyMe from "./pages/WhyMe";
 import ContactSection from "./pages/ContactSection";
 import Footer from "./pages/Footer";
-
-
+import Navbar from "./components/Navbar";
 
 function App() {
   useLenis();
 
   return (
     <div>
+      {/* Global navbar — fixed, floats over every section */}
+      <Navbar />
+
       <div style={{ position: "sticky", top: 0, zIndex: 0, height: "100vh" }}>
         <HeroSection />
       </div>
@@ -25,8 +27,6 @@ function App() {
         <WhyMe />
         <ContactSection />
         <Footer />
-
-
       </div>
     </div>
   );
