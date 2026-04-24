@@ -17,7 +17,7 @@ const HERO_INLINE_LINKS = [
   { label: "ABOUT",    href: "#about"    },
 ];
 
-const EMAIL = "hello@yourname.com"; // ← update
+const EMAIL = "hello@yourname.com";
 
 const SOCIAL = [
   {
@@ -49,14 +49,13 @@ const SOCIAL = [
   },
 ];
 
-// Shared button style — rounded
 const btnBase = {
   fontFamily:    "'Inter', sans-serif",
   fontSize:      "11px",
   fontWeight:    700,
   letterSpacing: "0.1em",
-  borderRadius:  "999px",
-  transition:    "background 0.2s ease, opacity 0.2s ease",
+  borderRadius:  "6px",
+  transition:    "background 0.3s ease, color 0.3s ease, opacity 0.2s ease",
   cursor:        "pointer",
   border:        "none",
   outline:       "none",
@@ -66,18 +65,59 @@ export default function Navbar() {
   const [open,    setOpen]    = useState(false);
   const [visible, setVisible] = useState(true);
   const [isHero,  setIsHero]  = useState(true);
+  const [isDark,  setIsDark]  = useState(false); // ← tracks dark bg sections
 
   const overlayRef    = useRef(null);
   const linksRef      = useRef([]);
   const overlayFooter = useRef(null);
   const lastScrollY   = useRef(0);
 
-  /* ── Scroll ── */
+  /* ── Dark section detection via IntersectionObserver ── */
+  useEffect(() => {
+    // Add data-theme="dark" to any section with a dark background in your JSX:
+    // <section id="projects" data-theme="dark"> ... </section>
+    // <section id="contact"  data-theme="dark"> ... </section>
+    const darkSections = document.querySelectorAll('[data-theme="dark"]');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find if any dark section is currently intersecting more than 20% into viewport
+        let anyDark = false;
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.08) {
+            anyDark = true;
+          }
+        });
+
+        // Re-check ALL dark sections, not just the changed ones
+        let stillDark = false;
+        darkSections.forEach((section) => {
+          const rect = section.getBoundingClientRect();
+          // Navbar is ~70px tall — check if it overlaps this section
+          if (rect.top < 80 && rect.bottom > 0) {
+            stillDark = true;
+          }
+        });
+
+        setIsDark(stillDark);
+      },
+      {
+        threshold: Array.from({ length: 20 }, (_, i) => i * 0.05),
+        rootMargin: "0px 0px 0px 0px",
+      }
+    );
+
+    darkSections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
+
+  /* ── Scroll: hide/show + hero detection + re-check dark ── */
   useEffect(() => {
     const onScroll = () => {
       const y  = window.scrollY;
       const vh = window.innerHeight;
       setIsHero(y < vh * 0.85);
+
       if (y < 80) {
         setVisible(true);
       } else if (y > lastScrollY.current + 5) {
@@ -87,7 +127,19 @@ export default function Navbar() {
         setVisible(true);
       }
       lastScrollY.current = y;
+
+      // Re-check dark sections on every scroll tick for accuracy
+      const darkSections = document.querySelectorAll('[data-theme="dark"]');
+      let stillDark = false;
+      darkSections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < 80 && rect.bottom > 0) {
+          stillDark = true;
+        }
+      });
+      setIsDark(stillDark);
     };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -121,6 +173,16 @@ export default function Navbar() {
     }
   }, [open]);
 
+  // ── Derived colors ──
+  // When overlay is open, always use dark (red bg = light text territory, keep black)
+  // When on dark section: flip to white buttons + white logo filter
+  const onDark = isDark && !open;
+
+  const btnBg      = onDark ? "white" : "black";
+  const btnColor   = onDark ? "black" : "white";
+  const btnHoverBg = onDark ? "#e0e0e0" : "#333";
+  const logoFilter = onDark ? "invert(1)" : "none"; // flips black SVG logo to white
+
   return (
     <>
       {/* ════════════════════════════
@@ -133,8 +195,7 @@ export default function Navbar() {
           transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1)",
         }}
       >
-
-        {/* ── HERO: Logo | inline links | HIRE ME ── */}
+        {/* ── HERO layout ── */}
         <div
           className="flex items-center justify-between px-8 py-5"
           style={{
@@ -146,15 +207,29 @@ export default function Navbar() {
             transition:    "opacity 0.35s ease, transform 0.35s ease",
           }}
         >
-          <img src={Logo} alt="Logo" className="h-8 w-auto select-none" />
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-8 w-auto select-none"
+            style={{ filter: logoFilter, transition: "filter 0.3s ease" }}
+          />
 
           <ul className="flex items-center gap-8">
             {HERO_INLINE_LINKS.map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}
-                  className="text-black hover:opacity-50 transition-opacity"
-                  style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em" }}
+                  style={{
+                    fontFamily:    "'Inter', sans-serif",
+                    fontSize:      "11px",
+                    fontWeight:    700,
+                    letterSpacing: "0.1em",
+                    color:         onDark ? "white" : "black",
+                    textDecoration: "none",
+                    transition:    "color 0.3s ease, opacity 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.5")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                 >
                   {link.label}
                 </a>
@@ -163,18 +238,26 @@ export default function Navbar() {
           </ul>
 
           <button
-            style={{ ...btnBase, background: "black", color: "white", padding: "10px 20px", display: "flex", alignItems: "center", gap: "8px" }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "#333")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "black")}
+            style={{
+              ...btnBase,
+              background: btnBg,
+              color:      btnColor,
+              padding:    "10px 20px",
+              display:    "flex",
+              alignItems: "center",
+              gap:        "8px",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = btnHoverBg)}
+            onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
           >
-            <span style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
+            <span style={{ width: 28, height: 28, borderRadius: "30px", overflow: "hidden", flexShrink: 0 }}>
               <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </span>
             HIRE ME
           </button>
         </div>
 
-        {/* ── COMPACT: Logo | MENU (hidden when open) | HIRE ME ↔ CLOSE ── */}
+        {/* ── COMPACT layout ── */}
         <div
           className="flex items-center justify-between px-8 py-5"
           style={{
@@ -186,29 +269,40 @@ export default function Navbar() {
             transition:    "opacity 0.35s ease, transform 0.35s ease",
           }}
         >
-          {/* Logo */}
-          <img src={Logo} alt="Logo" className="h-8 w-auto select-none" />
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-8 w-auto select-none"
+            style={{ filter: logoFilter, transition: "filter 0.3s ease" }}
+          />
 
-          {/* Center: MENU — fades out when overlay opens */}
+          {/* MENU button */}
           <button
-            onClick={() => setOpen(true)}
-            style={{
-              ...btnBase,
-              background:    "black",
-              color:         "white",
-              padding:       "10px 24px",
-              opacity:       open ? 0 : 1,
-              pointerEvents: open ? "none" : "auto",
-              transition:    "background 0.2s ease, opacity 0.25s ease",
-            }}
-            onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = "#333"; }}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "black")}
-            aria-label="Open menu"
-          >
-            MENU
-          </button>
-
-          {/* Right slot: HIRE ME ↔ CLOSE ✕ */}
+  onClick={() => setOpen(true)}
+  style={{
+    ...btnBase,
+    background:    btnBg,
+    color:         btnColor,
+    padding:       "10px 16px 10px 20px",
+    opacity:       open ? 0 : 1,
+    pointerEvents: open ? "none" : "auto",
+    display:       "flex",
+    alignItems:    "center",
+    gap:           "10px",
+  }}
+  onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = btnHoverBg; }}
+  onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
+  aria-label="Open menu"
+>
+  MENU
+  {/* Hamburger icon */}
+  <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+    <line x1="0" y1="1"  x2="18" y2="1"  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <line x1="0" y1="7"  x2="18" y2="7"  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <line x1="0" y1="13" x2="18" y2="13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+</button>
+          {/* Right slot: HIRE ME ↔ CLOSE */}
           <div style={{ position: "relative", height: "44px", minWidth: "130px" }}>
             {/* HIRE ME */}
             <button
@@ -216,8 +310,8 @@ export default function Navbar() {
                 ...btnBase,
                 position:      "absolute",
                 inset:         0,
-                background:    "black",
-                color:         "white",
+                background:    btnBg,
+                color:         btnColor,
                 display:       "flex",
                 alignItems:    "center",
                 gap:           "8px",
@@ -225,31 +319,31 @@ export default function Navbar() {
                 opacity:       open ? 0 : 1,
                 pointerEvents: open ? "none" : "auto",
               }}
-              onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = "#333"; }}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "black")}
+              onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = btnHoverBg; }}
+              onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
             >
-              <span style={{ width: 28, height: 28, borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
+              <span style={{ width: 28, height: 28, borderRadius: "10%", overflow: "hidden", flexShrink: 0 }}>
                 <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </span>
               HIRE ME
             </button>
 
-            {/* CLOSE ✕ */}
+            {/* CLOSE ✕ — always black/white regardless of section */}
             <button
               onClick={() => setOpen(false)}
               style={{
                 ...btnBase,
-                position:      "absolute",
-                inset:         0,
-                background:    "black",
-                color:         "white",
-                display:       "flex",
-                alignItems:    "center",
-                justifyContent:"center",
-                gap:           "8px",
-                padding:       "0 20px",
-                opacity:       open ? 1 : 0,
-                pointerEvents: open ? "auto" : "none",
+                position:       "absolute",
+                inset:          0,
+                background:     "black",
+                color:          "white",
+                display:        "flex",
+                alignItems:     "center",
+                justifyContent: "center",
+                gap:            "8px",
+                padding:        "0 20px",
+                opacity:        open ? 1 : 0,
+                pointerEvents:  open ? "auto" : "none",
               }}
               onMouseEnter={(e) => { if (open) e.currentTarget.style.background = "#333"; }}
               onMouseLeave={(e) => (e.currentTarget.style.background = "black")}
@@ -277,7 +371,6 @@ export default function Navbar() {
           pointerEvents: open ? "auto" : "none",
         }}
       >
-        {/* Links */}
         <div className="flex-1 flex items-center justify-center">
           <ul className="flex flex-col items-center" style={{ gap: "0.05em" }}>
             {NAV_LINKS.map((link, i) => (
@@ -307,7 +400,6 @@ export default function Navbar() {
           </ul>
         </div>
 
-        {/* Footer: social icons left · email right */}
         <div
           ref={overlayFooter}
           className="flex items-center justify-between px-8 pb-7 pt-4"
@@ -315,24 +407,14 @@ export default function Navbar() {
         >
           <div className="flex items-center gap-5">
             {SOCIAL.map((s) => (
-              <a
-                key={s.name}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.name}
-                className="text-black/80 hover:text-black transition-colors"
-              >
+              <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.name}
+                className="text-black/80 hover:text-black transition-colors">
                 {s.icon}
               </a>
             ))}
           </div>
-
-          <a
-            href={`mailto:${EMAIL}`}
-            className="text-black/80 hover:text-black transition-colors"
-            style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.05em" }}
-          >
+          <a href={`mailto:${EMAIL}`} className="text-black/80 hover:text-black transition-colors"
+            style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", fontWeight: 600, letterSpacing: "0.05em" }}>
             {EMAIL}
           </a>
         </div>

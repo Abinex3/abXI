@@ -29,6 +29,7 @@ export default function ContactSection() {
       }}
     >
     <section
+    id="contact" data-theme="dark"
       ref={sectionRef}
       style={{
         background: "#111",
