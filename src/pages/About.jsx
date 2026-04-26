@@ -1,9 +1,11 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import IMG from "../assets/img.png";
 
 export default function About() {
   const polaroidRef = useRef(null);
   const sectionRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleMouseMove = (e) => {
     const card = polaroidRef.current;
@@ -36,52 +38,51 @@ export default function About() {
         paddingBottom: "6rem",
       }}
     >
-    {/* Giant ABOUT — bleeds full width */}
-<div
-  style={{
-    paddingTop: "5rem",
-    overflow: "hidden",
-    pointerEvents: "none",
-    userSelect: "none",
-  }}
->
-  <h2
-    style={{
-      fontFamily: "'Bebas Neue', sans-serif",
-      fontSize: "28.5vw",        // bleeds edge to edge
-      fontWeight: 900,
-      color: "#111",
-      margin: 0,
-      letterSpacing: "-0.01em",
-      lineHeight: 0.85,
-      whiteSpace: "nowrap",
-      textAlign: "center",
-    }}
-  >
-    ABOUT
-  </h2>
+      {/* Giant ABOUT — bleeds full width */}
+      <div
+        style={{
+          paddingTop: "5rem",
+          overflow: "hidden",
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      >
+        <h2
+          style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "28.5vw",
+            fontWeight: 900,
+            color: "#111",
+            margin: 0,
+            letterSpacing: "-0.01em",
+            lineHeight: 0.85,
+            whiteSpace: "nowrap",
+            textAlign: "center",
+          }}
+        >
+          ABOUT
+        </h2>
 
-  {/* Orange label — right */}
-  <div
-    style={{
-      textAlign: "right",
-      paddingRight: "2rem",
-      marginTop: "0.6rem",
-    }}
-  >
-    <span
-      style={{
-        fontFamily: "'Caveat', cursive",
-        fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
-        fontStyle: "italic",
-        color: "#e03a1e",
-        fontWeight: 700,
-      }}
-    >
-      the human behind the code.
-    </span>
-  </div>
-</div>
+        <div
+          style={{
+            textAlign: "right",
+            paddingRight: "2rem",
+            marginTop: "0.6rem",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Caveat', cursive",
+              fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
+              fontStyle: "italic",
+              color: "#e03a1e",
+              fontWeight: 700,
+            }}
+          >
+            the human behind the code.
+          </span>
+        </div>
+      </div>
 
       {/* Content grid */}
       <div
@@ -105,20 +106,14 @@ export default function About() {
               maxWidth: "300px",
             }}
           >
-            Hi, I'm Abinesh. A full stack developer
-            building products from zero to something real —
-            clean code, sharp interfaces, and nothing
-            that embarrasses itself in production.
+            Hi, I'm Abinesh. A full stack developer building products from zero
+            to something real — clean code, sharp interfaces, and nothing that
+            embarrasses itself in production.
           </p>
         </div>
 
         {/* Center — polaroid */}
-        <div
-          style={{
-            perspective: "900px",
-            cursor: "none",
-          }}
-        >
+        <div style={{ perspective: "900px", cursor: "none" }}>
           <div
             ref={polaroidRef}
             style={{
@@ -165,17 +160,14 @@ export default function About() {
               marginBottom: "2.5rem",
             }}
           >
-            Most developers write code. I build experiences —
-            the kind that loads fast, feels smooth, and makes
-            whoever hired me look good. I'm open to abroad
-            opportunities and freelance work where the
-            bar is high and the problem is real.
+            Most developers write code. I build experiences — the kind that
+            loads fast, feels smooth, and makes whoever hired me look good. I'm
+            open to abroad opportunities and freelance work where the bar is
+            high and the problem is real.
           </p>
 
-          {/* CTA — handwritten + arrow + button */}
+          {/* CTA — handwritten label + arrow + button */}
           <div style={{ display: "flex", alignItems: "flex-end", gap: "1rem" }}>
-
-            {/* Handwritten label + arrow */}
             <div style={{ textAlign: "center", marginBottom: "0.5rem" }}>
               <p
                 style={{
@@ -190,7 +182,6 @@ export default function About() {
                 <br />
                 about me
               </p>
-              {/* Hand-drawn arrow SVG */}
               <svg
                 viewBox="0 0 60 40"
                 width="60"
@@ -216,9 +207,9 @@ export default function About() {
               </svg>
             </div>
 
-            {/* Button */}
-            <a
-              href="#more"
+            {/* Button — navigate to /about instead of href */}
+            <button
+              onClick={() => navigate("/about")}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -230,17 +221,14 @@ export default function About() {
                 fontWeight: 700,
                 letterSpacing: "0.18em",
                 padding: "1rem 1.5rem",
-                textDecoration: "none",
+                border: "none",
                 borderRadius: "2px",
+                cursor: "pointer",
                 transition: "background 0.25s ease",
                 whiteSpace: "nowrap",
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.background = "#e03a1e")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.background = "#111")
-              }
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#e03a1e")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#111")}
             >
               <span
                 style={{
@@ -263,7 +251,7 @@ export default function About() {
                 />
               </span>
               MORE ABOUT ME
-            </a>
+            </button>
           </div>
         </div>
       </div>
