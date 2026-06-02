@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Brand colours ─────────────────────────────────────────────────────────────
-const C_BG        = "#F05235";
+const C_BG = "#e05a30";
 const C_HEADING   = "#1A0800";
 const C_SCRIPT    = "#fff";
 const C_UNDERLINE = "#1A0800";
@@ -76,6 +76,9 @@ export default function AboutStory() {
     });
     return () => observer.disconnect();
   }, []);
+
+  console.log("Story BG:", C_BG);
+
 
   return (
     <section
@@ -207,64 +210,34 @@ export default function AboutStory() {
         {/* Left — XI monogram + brand note */}
         <div data-reveal>
           {/* Ghost XI */}
-          <div
-            style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: "clamp(120px, 18vw, 220px)",
-              lineHeight: 0.85,
-              color: "rgba(26,8,0,0.1)",
-              letterSpacing: "-0.02em",
-              userSelect: "none",
-              marginBottom: 24,
-            }}
-          >
-            XI
-          </div>
+          {/* Nokia 3D Model */}
+<div
+  style={{
+    width: "100%",
+    aspectRatio: "3 / 4",
+    borderRadius: 8,
+    overflow: "hidden",
+    marginBottom: 24,
+    position: "relative",
+  }}
+>
+  <iframe
+    title="Nokia"
+    frameBorder="0"
+    allowFullScreen
+    allow="autoplay; fullscreen; xr-spatial-tracking"
+    src="https://sketchfab.com/models/23add81995f741de8f1b00abce62dd67/embed?autospin=1&autostart=1&ui_infos=0&ui_controls=0&ui_stop=0&ui_watermark=0&ui_ar=0&ui_help=0&ui_settings=0&ui_vr=0&ui_inspector=0&ui_annotations=0&dnt=1"
+    style={{ width: "100%", height: "100%", border: "none" }}
+  />
 
-          {/* Age tag */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: C_TAG_BG,
-              border: "1px solid rgba(26,8,0,0.15)",
-              borderRadius: 2,
-              padding: "8px 14px",
-              marginBottom: 20,
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 11,
-                fontWeight: 500,
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-                color: C_TAG_TEXT,
-              }}
-            >
-              Age 11 · The spark
-            </span>
-          </div>
+  {/* Hide top bar (share icon, avatar) */}
+  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 55, background: "#e05a30", zIndex: 10 }} />
 
-          {/* Brand callout */}
-          <p
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "clamp(13px, 1vw, 15px)",
-              fontWeight: 400,
-              lineHeight: 1.75,
-              color: C_BODY,
-              margin: 0,
-              maxWidth: 280,
-            }}
-          >
-            XI is the Roman numeral for 11 — the age everything clicked.
-            That's why the brand is called{" "}
-            <strong style={{ fontWeight: 700, color: C_HEADING }}>abXI</strong>.
-            Every project carries that original question inside it.
-          </p>
+  {/* Hide bottom bar (settings, HD, VR buttons) */}
+  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 55, background: "#e05a30", zIndex: 10 }} />
+</div>          {/* Age tag */}
+          
+          
         </div>
 
         {/* Right — story paragraphs */}
@@ -349,18 +322,6 @@ export default function AboutStory() {
           </div>
         </div>
       </div>
-
-      {/* ── Bottom divider ── */}
-      <div
-        data-reveal
-        style={{
-          width: "100%",
-          height: 1,
-          background: C_DIVIDER,
-          position: "relative",
-          zIndex: 10,
-        }}
-      />
     </section>
   );
 }

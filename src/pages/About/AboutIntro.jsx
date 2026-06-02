@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Brand colours ─────────────────────────────────────────────────────────────
-const C_BG      = "#F05235"; // background
+const C_BG      = "#e05a30"; // background
 const C_HEADING = "#1A0800"; // big ABOUT text (near-black on coral)
 const C_SUB     = "#581A12"; // subtitle / body text
 const C_GRAIN   = C_BG;     // grain tint stays on brand
