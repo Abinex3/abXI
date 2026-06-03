@@ -4,8 +4,11 @@ import AboutIntro from "../../pages/About/AboutIntro";
 import AboutStory from "../../pages/About/AboutStory";
 import AboutGallery from "../../pages/About/AboutGallery";
 import AboutWall from "../../pages/About/AboutWall";
+import DayInLife from "../../pages/About/DayInLife";
 
 import AboutSkills from "../../pages/About/AboutSkills";
+import ContactSection from "../ContactSection";
+import Footer from "../Footer";
 
 
 export default function AboutMore() {
@@ -14,7 +17,7 @@ export default function AboutMore() {
   }, []);
 
   return (
-    <div style={{ background: "#e05a30", display: "flex", flexDirection: "column" }}>
+    <div style={{ display: "flex", flexDirection: "column" }}>
 
       {/* Section 1 — polaroid hero */}
       <AboutHero />
@@ -22,7 +25,12 @@ export default function AboutMore() {
       <AboutStory />
       <AboutGallery />
       {/* <AboutSkills /> */}
+      
       <AboutWall />
+      {/* <DayInLife />  */}
+      <ContactSection />
+              <Footer />
+      
 
 
     </div>
