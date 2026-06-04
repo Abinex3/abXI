@@ -14,7 +14,7 @@ import Footer from "./pages/Footer";
 
 // Separate route page
 import AboutMore from "./pages/About/More";
-
+import Projects from "./pages/Projects/Works";
 // ── Home — all sections stacked ───────────────────────────────────────────────
 function Home() {
   useLenis();
@@ -47,6 +47,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutMore />} />
+        <Route path="/work" element={<Projects />} />
       </Routes>
     </BrowserRouter>
   );

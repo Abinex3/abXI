@@ -5,19 +5,19 @@ import gsap from "gsap";
 
 const NAV_LINKS = [
   { label: "HOME",     href: "#home"     },
-  { label: "PROJECTS", href: "#projects" },
+  { label: "PROJECTS", href: "" },
   { label: "MY STACK", href: "#stack"    },
-  { label: "ABOUT",    href: "#about"    },
+  { label: "ABOUT",    href: "/About/more"    },
   { label: "CONTACT",  href: "#contact"  },
 ];
 
 const HERO_INLINE_LINKS = [
-  { label: "PROJECTS", href: "#projects" },
+  { label: "PROJECTS", href: "/work" },
   { label: "MY STACK", href: "#stack"    },
-  { label: "ABOUT",    href: "#about"    },
+  { label: "ABOUT",    href: "/about"    },
 ];
 
-const EMAIL = "hello@yourname.com";
+const EMAIL = "abxidev@gmail.com";
 
 const SOCIAL = [
   {

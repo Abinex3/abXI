@@ -1,0 +1,107 @@
+/* PortfolioHero.css */
+
+.ph-root {
+  background: #EAE6DF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.ph-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 48px 0;
+}
+
+.ph-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(80px, 14vw, 160px);
+  line-height: 0.88;
+  text-transform: uppercase;
+  color: #0f0f0f;
+  letter-spacing: -2px;
+  margin: 0;
+}
+
+.ph-title-row {
+  display: block;
+}
+
+.ph-title-row2 {
+  display: inline-flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+.ph-count {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: clamp(24px, 4vw, 52px);
+  color: #E8440A;
+  font-style: italic;
+  margin-left: 6px;
+  margin-top: 12px;
+  line-height: 1;
+  position: relative;
+  top: -10px;
+}
+
+.ph-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 48px 28px;
+  margin-top: 8px;
+}
+
+.ph-footer-text {
+  font-size: 14px;
+  color: #0f0f0f;
+  letter-spacing: 0.02em;
+  font-family: 'Barlow', sans-serif;
+}
+
+/* Orange gradient strip at the bottom */
+.ph-strip {
+  height: 110px;
+  background: linear-gradient(135deg, #E8440A 0%, #F4855A 60%, #F9B89A 100%);
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ph-new-badge {
+  background: #E8440A;
+  border: 2.5px solid #0f0f0f;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  font-style: italic;
+  color: #fff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 2;
+}
+
+/* Black triangle corner on the right */
+.ph-strip-corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100px;
+  background: #0f0f0f;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+/* Font import — add this to your index.html or global CSS if not already there */
+/* @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@900&family=Barlow:wght@400;500&display=swap'); */
