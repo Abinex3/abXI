@@ -1,5 +1,5 @@
 import ProjectCard from "./ProjectCard";
-import { projects } from "../data/projects"; // Update path to your projects.js location
+import { projects } from "../data/projects";
 
 export default function PortfolioList() {
   return (
@@ -14,8 +14,10 @@ export default function PortfolioList() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(2, 1fr)",
-          gridAutoRows: "320px",
-          gap: "24px",
+          gridAutoRows: "auto",
+          alignItems: "start",
+          columnGap: "48px",
+          rowGap: "60px",
           maxWidth: "1400px",
           margin: "0 auto",
         }}

@@ -1,58 +1,29 @@
 export default function ProjectCard({ project }) {
   const isFeatured = project.featured;
-  const projectType = project.company === "Personal" ? "PERSONAL" : "WORK";
 
   return (
     <div
+      className="project-card"
       style={{
         gridColumn: isFeatured ? "span 2" : "span 1",
-        gridRow: isFeatured ? "span 2" : "span 1",
+        gridRow: "span 1",
         position: "relative",
-        overflow: "hidden",
-        borderRadius: "6px",
-        backgroundColor: "#fff",
         cursor: "pointer",
-        transition: "transform 0.3s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-4px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
+        display: "flex",
+        flexDirection: "column",
+
       }}
     >
-      {/* NEW Badge - Featured Only */}
-      {isFeatured && (
-        <div
-          style={{
-            position: "absolute",
-            top: "12px",
-            left: "12px",
-            background: "#E8440A",
-            border: "2px solid #0f0f0f",
-            borderRadius: "3px",
-            padding: "4px 10px",
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "11px",
-            fontWeight: 900,
-            color: "#fff",
-            letterSpacing: "1px",
-            zIndex: 10,
-            textTransform: "uppercase",
-          }}
-        >
-          NEW
-        </div>
-      )}
-
-      {/* Image Container */}
+      {/* Image */}
       <div
         style={{
           position: "relative",
           width: "100%",
-          height: isFeatured ? "280px" : "240px",
+          flex: 1,
+           minHeight: isFeatured ? "480px" : "300px",
           overflow: "hidden",
-          backgroundColor: "#e0e0e0",
+          backgroundColor: "#0f0f0f",
+          borderRadius: "6px",
         }}
       >
         <img
@@ -62,100 +33,89 @@ export default function ProjectCard({ project }) {
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            display: "block",
           }}
         />
 
-        {/* Tags - Show on Hover */}
+        {/* Category Tags - show on hover */}
         <div
+          className="project-card-tags"
           style={{
             position: "absolute",
-            bottom: "16px",
-            right: "16px",
+            inset: 0,
             display: "flex",
-            gap: "8px",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
             opacity: 0,
             transition: "opacity 0.3s ease",
+            background: "rgba(0, 0, 0, 0.3)",
           }}
-          className="project-card-tags"
         >
-          {/* Category Tag */}
-          <span
-            style={{
-              background: "rgba(0, 0, 0, 0.8)",
-              color: "#fff",
-              padding: "6px 12px",
-              fontSize: "12px",
-              borderRadius: "4px",
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 500,
-              letterSpacing: "0.5px",
-              textTransform: "uppercase",
-            }}
-          >
-            {project.category}
-          </span>
-
-          {/* Work/Personal Tag */}
-          <span
-            style={{
-              background: "rgba(0, 0, 0, 0.8)",
-              color: "#fff",
-              padding: "6px 12px",
-              fontSize: "12px",
-              borderRadius: "4px",
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 500,
-              letterSpacing: "0.5px",
-              textTransform: "uppercase",
-            }}
-          >
-            {projectType}
-          </span>
+          <span style={tagStyle}>{project.type}</span>
+          <span style={tagStyle}>{project.category}</span>
         </div>
       </div>
 
-      {/* Content - Name + Description */}
+      {/* Name (left) + Description (right) - always visible */}
       <div
         style={{
-          padding: isFeatured ? "28px" : "20px",
-          backgroundColor: "#fff",
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          gap: "24px",
+          padding: "20px 4px 0",
         }}
       >
-        {/* Title */}
         <h3
           style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: isFeatured ? "28px" : "22px",
+            fontSize: isFeatured ? "34px" : "28px",
             fontWeight: 900,
             color: "#0f0f0f",
-            margin: "0 0 8px 0",
+            margin: 0,
             textTransform: "uppercase",
-            letterSpacing: "-0.5px",
+            letterSpacing: "0px",
+            lineHeight: 1,
+            flexShrink: 0,
           }}
         >
           {project.name}
         </h3>
 
-        {/* Description */}
         <p
           style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: isFeatured ? "14px" : "13px",
-            color: "#666",
-            lineHeight: "1.5",
+            fontSize: "15px",
+            color: "#444",
+            lineHeight: 1.4,
             margin: 0,
+            textAlign: "right",
+            maxWidth: "55%",
           }}
         >
           {project.description}
         </p>
       </div>
 
-      {/* Hover Effect */}
       <style>{`
-        div:has(.project-card-tags):hover .project-card-tags {
-          opacity: 1 !important;
+        .project-card:hover .project-card-tags {
+          opacity: 1;
         }
       `}</style>
     </div>
   );
 }
+
+const tagStyle = {
+  background: "#fff",
+  color: "#0f0f0f",
+  padding: "10px 20px",
+  fontSize: "14px",
+  borderRadius: "6px",
+  fontFamily: "'Inter', sans-serif",
+  fontWeight: 600,
+  letterSpacing: "0.5px",
+  textTransform: "uppercase",
+  border: "1px solid #0f0f0f",
+};

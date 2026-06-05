@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import PortfolioHero from "./PortfolioHero";
 import PortfolioList from "./PortfolioList";
+import ContactSection from "../ContactSection";
+import Footer from "../Footer";
 
 export default function PortfolioMore() {
   useEffect(() => {
@@ -15,6 +17,10 @@ export default function PortfolioMore() {
 
       {/* Section 2 — Project Grid */}
       <PortfolioList />
+
+      <ContactSection />
+
+      <Footer />
 
     </div>
   );

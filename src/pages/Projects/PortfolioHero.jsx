@@ -3,7 +3,7 @@ export default function PortfolioHero() {
     <section
       style={{
         background: "#e8e0d5",
-        minHeight: "100vh",
+        minHeight: "80vh",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
