@@ -60,7 +60,7 @@ export default function PortfolioHero() {
               fontStyle: "italic",
             }}
           >
-            (5)
+            (4)
           </span>
         </div>
       </div>
