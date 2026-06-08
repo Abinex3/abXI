@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function ProjectCard({ project }) {
+    const navigate = useNavigate();
   const isFeatured = project.featured;
   const screenshots = project.screenshots || [];
   const hasShots = screenshots.length > 0;
@@ -26,6 +29,7 @@ export default function ProjectCard({ project }) {
       className="project-card"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+       onClick={() => navigate(`/work/${project.id}`)}
       style={{
         gridColumn: isFeatured ? "span 2" : "span 1",
         gridRow: "span 1",
