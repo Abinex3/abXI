@@ -267,17 +267,7 @@ export default function About() {
           gap: "1rem",
         }}
       >
-        <div style={{ width: "28px", height: "1px", background: "#e03a1e" }} />
-        <span
-          style={{
-            fontSize: "0.62rem",
-            fontWeight: 600,
-            letterSpacing: "0.2em",
-            color: "#00000040",
-          }}
-        >
-          BASED IN INDIA — OPEN TO WORLD
-        </span>
+       
       </div>
     </section>
   );

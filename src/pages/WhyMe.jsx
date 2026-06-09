@@ -41,9 +41,11 @@ const PATH_VB_W = 400;
 const PATH_VB_H = 874;
 
 // ── How far ahead of the curve point the FRONT wheel sits (viewBox units) ──
-// The bike image is 220px wide; front wheel is roughly 160px ahead of rear wheel.
-// In viewBox X units (rightColW maps PATH_VB_W → real px), we offset by ~60 vb units.
 const FRONT_WHEEL_OFFSET = 0.04; // in progress units (tweak if needed)
+
+// ── Reveal control: bike + trail stay hidden until you scroll into the section ──
+const REVEAL_START = 0.02; // progress where the bike starts fading in
+const REVEAL_END   = 0.07; // progress where the bike is fully visible
 
 function cubicBezier(p0, cp1, cp2, p1, t) {
   const mt = 1 - t;
@@ -127,19 +129,25 @@ export default function WhyMe() {
         const rect     = section.getBoundingClientRect();
         const sectionH = section.offsetHeight;
         const sectionW = section.offsetWidth;
-        
 
         const scrolled  = -rect.top;
         const total     = sectionH - window.innerHeight;
         const progress  = Math.max(0, Math.min(1, scrolled / total));
 
-//         const fadeStart = 0.92;
-// const opacity = progress >= 1 ? 0 : progress >= fadeStart
-//   ? 1 - (progress - fadeStart) / (1 - fadeStart)
-//   : 1;
+        // ── Reveal logic: hidden before REVEAL_START, fades in by REVEAL_END.
+        //    NO fade-out at the end — the bike simply rides off the bottom and
+        //    gets covered by the next (black) container via z-index/clipping. ──
+        let opacity;
+        if (progress < REVEAL_START) {
+          opacity = 0; // invisible at the very top so it doesn't sit parked
+        } else if (progress < REVEAL_END) {
+          opacity = (progress - REVEAL_START) / (REVEAL_END - REVEAL_START);
+        } else {
+          opacity = 1; // stays fully visible right through to the end
+        }
 
-// bikeWrap.style.opacity = opacity;
-// canvas.style.opacity   = opacity;
+        bikeWrap.style.opacity = opacity;
+        canvas.style.opacity   = opacity;
 
         const rightColW       = sectionW * 0.45;
         const rightColOffsetX = sectionW * 0.55;
@@ -163,10 +171,12 @@ export default function WhyMe() {
         if (canvas.width !== sectionW)  canvas.width  = sectionW;
         if (canvas.height !== sectionH) canvas.height = sectionH;
 
-        // Trail draws up to front wheel so road covers both tyres
-        drawTrail(canvas, progress, frontProgress, scaleX, scaleY, rightColOffsetX);
-
-        
+        // Only draw the trail once the bike has begun revealing
+        if (opacity > 0) {
+          drawTrail(canvas, progress, frontProgress, scaleX, scaleY, rightColOffsetX);
+        } else {
+          canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+        }
       });
     };
 
@@ -198,18 +208,24 @@ export default function WhyMe() {
   }, []);
 
   return (
-    // ✅ FIX 2: removed the outer wrapper div that caused the double scrollbar.
-    // overflow: "hidden" on section clips the canvas/bike that go outside bounds.
+    // ✅ The section itself is a normal page-flow block. We do NOT put overflow
+    //    on it (that was creating a nested scroll container → second scrollbar).
+    //    Instead, an inner .clip wrapper clips the absolutely-positioned bike +
+    //    canvas so nothing spills past the section bounds.
     <section
       ref={sectionRef}
       style={{
         background: "#e8e0d5",
         fontFamily: "'Inter', sans-serif",
         position: "relative",
-        overflowX: "hidden", // ✅ clips horizontal overflow (bike/trail) without adding a vertical scrollbar
         display: "grid",
         gridTemplateColumns: "55% 45%",
         alignItems: "start",
+        // ✅ FIX: clip overflow on the section block itself. `clip` does NOT
+        //    create a scroll container (unlike `hidden`/`auto`), so it removes
+        //    the stray second scrollbar while still hiding the bike/trail that
+        //    extend beyond the edges.
+        overflow: "clip",
       }}
     >
       {/* ════════════ LEFT COLUMN ════════════ */}
@@ -311,8 +327,6 @@ export default function WhyMe() {
             </div>
           ))}
         </div>
-
-       
       </div>
 
       {/* ════════════ RIGHT COLUMN — sticky lane ════════════ */}
@@ -321,7 +335,6 @@ export default function WhyMe() {
           position: "sticky",
           top: 0,
           height: "100vh",
-          overflow: "hidden",
           pointerEvents: "none",
         }}
       />
@@ -335,6 +348,8 @@ export default function WhyMe() {
           left: 0,
           pointerEvents: "none",
           zIndex: 1,
+          opacity: 0,                      // start hidden; scroll handler reveals it
+          transition: "opacity 0.3s ease", // smooth fade for the surprise reveal
         }}
       />
 
@@ -349,7 +364,9 @@ export default function WhyMe() {
           pointerEvents: "none",
           zIndex: 10,
           transformOrigin: "110px 200px",
-          willChange: "transform",
+          willChange: "transform, opacity",
+          opacity: 0,                      // start hidden so it doesn't sit parked at top
+          transition: "opacity 0.35s ease",// smooth pop-in once scrolled into view
         }}
       >
         <img

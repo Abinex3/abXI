@@ -11,6 +11,7 @@ import About from "./pages/About";
 import WhyMe from "./pages/WhyMe";
 import ContactSection from "./pages/ContactSection";
 import Footer from "./pages/Footer";
+import Contact from "./pages/Contact";
 
 // Separate route page
 import AboutMore from "./pages/About/More";
@@ -34,6 +35,7 @@ function Home() {
         <WhyMe />
         <ContactSection />
         <Footer />
+        
       </div>
     </div>
   );
@@ -51,6 +53,7 @@ export default function App() {
         <Route path="/about" element={<AboutMore />} />
         <Route path="/work" element={<Projects />} />
         <Route path="/work/:id" element={<ProjectDetail />} />
+<Route path="/contact" element={<><Contact /><Footer /></>} />
 
       </Routes>
     </BrowserRouter>

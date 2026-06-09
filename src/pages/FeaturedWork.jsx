@@ -290,27 +290,7 @@ export default function FeaturedWork() {
         })}
       </div>
 
-      {/* Bottom line */}
-      <div
-        style={{
-          maxWidth: "1400px",
-          margin: "4rem auto 0 auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: "'Caveat', cursive",
-            fontSize: "1.2rem",
-            color: "#ffffff30",
-          }}
-        >
-          more coming soon...
-        </p>
-        <div style={{ width: "40px", height: "1px", background: "#e03a1e" }} />
-      </div>
+     
     </section>
   );
 }
