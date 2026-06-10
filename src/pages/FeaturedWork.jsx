@@ -6,27 +6,30 @@ import Project3 from '../assets/projects/project3.jpeg';
 const projects = [
   {
     number: "01",
-    tags: "FULL STACK, REACT, NODE.JS",
-    title: "Project Name One",
-    desc: "A short compelling line about what this project does and the problem it solves for real users.",
+    tags: "FULL STACK, REACT, NODE.JS, MSSQL, DOCKER",
+    title: "EBD Security",
+    desc: "A security tracking system delivered across web and mobile.",
     image: Project1,
     bg: "#111",
+    id: 1,
   },
   {
     number: "02",
-    tags: "FRONTEND, GSAP, TAILWIND",
-    title: "Project Name Two",
-    desc: "Another punchy line here. Keep it under two sentences — let the screenshot do the heavy lifting.",
+    tags: "FRONTEND, GSAP, REACT",
+    title: "Jaya Hospital",
+    desc: "A responsive hospital website built with React.",
     image: Project2,
     bg: "#161616",
+    id : 2,
   },
   {
     number: "03",
-    tags: "BACKEND, API, POSTGRES",
-    title: "Project Name Three",
-    desc: "What was the problem? What did you build? What changed after? Answer all three in two lines.",
+    tags: "FULL STACK, REACT, NODE.JS, MSSQL, DOCKER",
+    title: "Infraconsoft V4",
+    desc: "Construction software for vehicle and inventory management.",
     image: Project3,
     bg: "#111",
+    id : 3,
   },
 ];
 
@@ -255,7 +258,7 @@ export default function FeaturedWork() {
                       }}
                     >
                       <a
-                        href="#"
+                        href={`/work/${p.id}`}
                         style={{
                           display: "inline-flex",
                           alignItems: "center",

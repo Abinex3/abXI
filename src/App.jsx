@@ -8,6 +8,8 @@ import HeroSection from "./pages/HeroSection";
 import WhatIDo from "./pages/WhatIDo";
 import FeaturedWork from "./pages/FeaturedWork";
 import About from "./pages/About";
+import Stack from "./pages/Stack";
+
 import WhyMe from "./pages/WhyMe";
 import ContactSection from "./pages/ContactSection";
 import Footer from "./pages/Footer";
@@ -54,6 +56,8 @@ export default function App() {
         <Route path="/work" element={<Projects />} />
         <Route path="/work/:id" element={<ProjectDetail />} />
 <Route path="/contact" element={<><Contact /><Footer /></>} />
+<Route path="/stack" element={<Stack />} />
+
 
       </Routes>
     </BrowserRouter>

@@ -4,17 +4,17 @@ import Logo from "../assets/abxi-01.svg";
 import gsap from "gsap";
 
 const NAV_LINKS = [
-  { label: "HOME",     href: "#home"     },
-  { label: "PROJECTS", href: "" },
-  { label: "MY STACK", href: "#stack"    },
-  { label: "ABOUT",    href: "/About/more"    },
-  { label: "CONTACT",  href: "#contact"  },
+  { label: "HOME",     href: "/home"     },
+  { label: "PROJECTS", href: "/work" },
+  { label: "MY STACK", href: "/stack"    },
+  { label: "ABOUT",    href: "/more"    },
+  { label: "CONTACT",  href: "/contact"  },
 ];
 
 const HERO_INLINE_LINKS = [
   { label: "PROJECTS", href: "/work" },
-  { label: "MY STACK", href: "#stack"    },
-  { label: "ABOUT",    href: "/about"    },
+  { label: "MY STACK", href: "/stack"    },
+  { label: "ABOUT",    href: "/more"    },
 ];
 
 const EMAIL = "abxidev@gmail.com";
@@ -197,22 +197,25 @@ export default function Navbar() {
       >
         {/* ── HERO layout ── */}
         <div
-          className="flex items-center justify-between px-8 py-5"
-          style={{
-            position:      isHero ? "relative" : "absolute",
-            top: 0, left: 0, right: 0,
-            opacity:       isHero ? 1 : 0,
-            pointerEvents: isHero ? "auto" : "none",
-            transform:     isHero ? "translateY(0)" : "translateY(-10px)",
-            transition:    "opacity 0.35s ease, transform 0.35s ease",
-          }}
-        >
+  className="items-center justify-between px-8 py-5"  // ← remove "flex" from here
+  style={{
+    display:       isHero ? "flex" : "none",   // ← ADD as first style line
+    position:      isHero ? "relative" : "absolute",
+    top: 0, left: 0, right: 0,
+    opacity:       isHero ? 1 : 0,
+    pointerEvents: isHero ? "auto" : "none",
+    transform:     isHero ? "translateY(0)" : "translateY(-10px)",
+    transition:    "opacity 0.35s ease, transform 0.35s ease",
+  }}
+>
+          <a href = '/' >
           <img
             src={Logo}
             alt="Logo"
             className="h-8 w-auto select-none"
             style={{ filter: logoFilter, transition: "filter 0.3s ease" }}
           />
+          </a>
 
           <ul className="flex items-center gap-8">
             {HERO_INLINE_LINKS.map((link) => (
@@ -237,6 +240,7 @@ export default function Navbar() {
             ))}
           </ul>
 
+<a href="/contact" >
           <button
             style={{
               ...btnBase,
@@ -253,22 +257,25 @@ export default function Navbar() {
             <span style={{ width: 28, height: 28, borderRadius: "30px", overflow: "hidden", flexShrink: 0 }}>
               <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </span>
-            HIRE ME
+            LET'S TALK
           </button>
+          </a>
         </div>
 
         {/* ── COMPACT layout ── */}
-        <div
-          className="flex items-center justify-between px-8 py-5"
-          style={{
-            position:      isHero ? "absolute" : "relative",
-            top: 0, left: 0, right: 0,
-            opacity:       isHero ? 0 : 1,
-            pointerEvents: isHero ? "none" : "auto",
-            transform:     isHero ? "translateY(10px)" : "translateY(0)",
-            transition:    "opacity 0.35s ease, transform 0.35s ease",
-          }}
-        >
+        {/* ── COMPACT layout ── */}
+<div
+  className="items-center justify-between px-8 py-5"  // ← remove "flex" from here
+  style={{
+    display:       isHero ? "none" : "flex",   // ← ADD as first style line
+    position:      isHero ? "absolute" : "relative",
+    top: 0, left: 0, right: 0,
+    opacity:       isHero ? 0 : 1,
+    pointerEvents: isHero ? "none" : "auto",
+    transform:     isHero ? "translateY(10px)" : "translateY(0)",
+    transition:    "opacity 0.35s ease, transform 0.35s ease",
+  }}
+>
           <img
             src={Logo}
             alt="Logo"
@@ -302,9 +309,10 @@ export default function Navbar() {
     <line x1="0" y1="13" x2="18" y2="13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
   </svg>
 </button>
-          {/* Right slot: HIRE ME ↔ CLOSE */}
-          <div style={{ position: "relative", height: "44px", minWidth: "130px" }}>
-            {/* HIRE ME */}
+          {/* Right slot: LET'S TALK ↔ CLOSE */}
+          <div style={{ position: "relative", height: "46px", minWidth: "150px" }}>
+            {/* LET'S TALK */}
+          <a href="/contact" >
             <button
               style={{
                 ...btnBase,
@@ -325,8 +333,9 @@ export default function Navbar() {
               <span style={{ width: 28, height: 28, borderRadius: "10%", overflow: "hidden", flexShrink: 0 }}>
                 <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </span>
-              HIRE ME
+              LET'S TALK
             </button>
+            </a>
 
             {/* CLOSE ✕ — always black/white regardless of section */}
             <button

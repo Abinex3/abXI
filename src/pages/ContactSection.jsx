@@ -141,7 +141,7 @@ export default function ContactSection() {
 
       {/* ── CTA Button ── */}
       <a
-        href={`mailto:${EMAIL}`}
+        href="/contact"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{

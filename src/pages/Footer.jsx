@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const NAV_LINKS = [
-  { label: "Work",    href: "#work"    },
-  { label: "About",   href: "#about"   },
-  { label: "Why Me",  href: "#why-me"  },
-  { label: "Contact", href: "#contact" },
+  { label: "Work",    href: "/work"    },
+  { label: "About",   href: "/about"   },
+  { label: "Stack",  href: "/stack"  },
+  { label: "Contact", href: "/contact" },
 ];
 
 const SOCIAL_LINKS = [
@@ -93,6 +93,7 @@ export default function Footer() {
         borderTop: "1px solid #00000010",
       }}
     >
+        <div style={{ position: "relative", zIndex: 1 }}>
       {/* ── Top row: nav links + social icons ── */}
       <div
         style={{
@@ -228,6 +229,21 @@ export default function Footer() {
           </span>
         </div>
       </div>
+      </div>
+
+      {/* ── Bottom orange gradient ── */}
+<div
+  style={{
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: "45%",
+    background: "linear-gradient(to bottom, transparent 0%, #e05a30 100%)",
+    pointerEvents: "none",
+    zIndex: 0,
+  }}
+/>
     </footer>
   );
 }
