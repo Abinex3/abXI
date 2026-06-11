@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
+import RouteTransition from "./components/RouteTransition";
 import useLenis from "./hooks/useLenis";
 
 // Home page sections
@@ -20,7 +21,6 @@ import AboutMore from "./pages/About/More";
 import Projects from "./pages/Projects/Works";
 import ProjectDetail from "./pages/Projects/ProjectDetail";
 
-// ── Home — all sections stacked ───────────────────────────────────────────────
 function Home() {
   useLenis();
 
@@ -37,29 +37,26 @@ function Home() {
         <WhyMe />
         <ContactSection />
         <Footer />
-        
       </div>
     </div>
   );
 }
 
-// ── App — router root ─────────────────────────────────────────────────────────
 export default function App() {
   return (
     <BrowserRouter>
-      {/* Navbar floats over every route */}
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<AboutMore />} />
-        <Route path="/work" element={<Projects />} />
-        <Route path="/work/:id" element={<ProjectDetail />} />
-<Route path="/contact" element={<><Contact /><Footer /></>} />
-<Route path="/stack" element={<Stack />} />
-
-
-      </Routes>
+      <RouteTransition>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutMore />} />
+          <Route path="/work" element={<Projects />} />
+          <Route path="/work/:id" element={<ProjectDetail />} />
+          <Route path="/contact" element={<><Contact /><Footer /></>} />
+          <Route path="/stack" element={<Stack />} />
+        </Routes>
+      </RouteTransition>
     </BrowserRouter>
   );
 }
