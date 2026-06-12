@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import RouteTransition from "./components/RouteTransition";
+import TransitionProvider from "./components/TransitionProvider";
 import useLenis from "./hooks/useLenis";
 
 // Home page sections
@@ -45,18 +46,19 @@ function Home() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-
-      <RouteTransition>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutMore />} />
-          <Route path="/work" element={<Projects />} />
-          <Route path="/work/:id" element={<ProjectDetail />} />
-          <Route path="/contact" element={<><Contact /><Footer /></>} />
-          <Route path="/stack" element={<Stack />} />
-        </Routes>
-      </RouteTransition>
+      <TransitionProvider>
+        <Navbar />
+        <RouteTransition>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<AboutMore />} />
+            <Route path="/work" element={<Projects />} />
+            <Route path="/work/:id" element={<ProjectDetail />} />
+            <Route path="/contact" element={<><Contact /><Footer /></>} />
+            <Route path="/stack" element={<Stack />} />
+          </Routes>
+        </RouteTransition>
+      </TransitionProvider>
     </BrowserRouter>
   );
 }

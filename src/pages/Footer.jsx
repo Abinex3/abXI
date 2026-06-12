@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import TransitionLink from "../components/TransitionLink";
 
 const NAV_LINKS = [
   { label: "Work",    href: "/work"    },
@@ -115,9 +116,9 @@ export default function Footer() {
           }}
         >
           {NAV_LINKS.map((link) => (
-            <a
+            <TransitionLink
               key={link.label}
-              href={link.href}
+              to={link.href}
               onMouseEnter={() => setHoveredLink(link.label)}
               onMouseLeave={() => setHoveredLink(null)}
               style={{
@@ -130,7 +131,7 @@ export default function Footer() {
               }}
             >
               {link.label}
-            </a>
+            </TransitionLink>
           ))}
         </nav>
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import TransitionLink from "../components/TransitionLink";
 
 const EMAIL = "abxidev@gmail.com";
 
@@ -140,8 +141,8 @@ export default function ContactSection() {
       </h2>
 
       {/* ── CTA Button ── */}
-      <a
-        href="/contact"
+      <TransitionLink
+        to="/contact"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
@@ -168,7 +169,7 @@ export default function ContactSection() {
         className="cta-btn"
       >
         HELL YES!
-      </a>
+      </TransitionLink>
 
       {/* ── Email address ── */}
       <a

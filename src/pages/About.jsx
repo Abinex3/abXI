@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import IMG from "../assets/img.png";
+import TransitionLink from "../components/TransitionLink";
 
 export default function About() {
   const polaroidRef = useRef(null);
@@ -208,8 +209,8 @@ export default function About() {
             </div>
 
             {/* Button — navigate to /about instead of href */}
-            <button
-              onClick={() => navigate("/about")}
+            <TransitionLink to={`/about`}>
+              <button
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -252,6 +253,7 @@ export default function About() {
               </span>
               MORE ABOUT ME
             </button>
+            </TransitionLink>
           </div>
         </div>
       </div>

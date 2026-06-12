@@ -1,21 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import IMG from "../assets/img.png";
 import Logo from "../assets/abxi-01.svg";
+import TransitionLink from "./TransitionLink";
+
 import gsap from "gsap";
 
 const NAV_LINKS = [
-  { label: "HOME",     href: "/home"     },
+  { label: "HOME",     href: "/"     },
   { label: "PROJECTS", href: "/work" },
   { label: "MY STACK", href: "/stack"    },
-  { label: "ABOUT",    href: "/more"    },
+  { label: "ABOUT",    href: "/about"    },
   { label: "CONTACT",  href: "/contact"  },
 ];
 
 const HERO_INLINE_LINKS = [
   { label: "PROJECTS", href: "/work" },
   { label: "MY STACK", href: "/stack"    },
-  { label: "ABOUT",    href: "/more"    },
+  { label: "ABOUT",    href: "/about"    },
 ];
+
+const COVER_MS = 1000; // must match TransitionProvider
+
 
 const EMAIL = "abxidev@gmail.com";
 
@@ -197,31 +202,31 @@ export default function Navbar() {
       >
         {/* ── HERO layout ── */}
         <div
-  className="items-center justify-between px-8 py-5"  // ← remove "flex" from here
-  style={{
-    display:       isHero ? "flex" : "none",   // ← ADD as first style line
-    position:      isHero ? "relative" : "absolute",
-    top: 0, left: 0, right: 0,
-    opacity:       isHero ? 1 : 0,
-    pointerEvents: isHero ? "auto" : "none",
-    transform:     isHero ? "translateY(0)" : "translateY(-10px)",
-    transition:    "opacity 0.35s ease, transform 0.35s ease",
-  }}
->
-          <a href = '/' >
-          <img
-            src={Logo}
-            alt="Logo"
-            className="h-8 w-auto select-none"
-            style={{ filter: logoFilter, transition: "filter 0.3s ease" }}
-          />
-          </a>
+          className="items-center justify-between px-8 py-5"
+          style={{
+            display:       isHero ? "flex" : "none",
+            position:      isHero ? "relative" : "absolute",
+            top: 0, left: 0, right: 0,
+            opacity:       isHero ? 1 : 0,
+            pointerEvents: isHero ? "auto" : "none",
+            transform:     isHero ? "translateY(0)" : "translateY(-10px)",
+            transition:    "opacity 0.35s ease, transform 0.35s ease",
+          }}
+        >
+          <TransitionLink to="/">
+            <img
+              src={Logo}
+              alt="Logo"
+              className="h-8 w-auto select-none"
+              style={{ filter: logoFilter, transition: "filter 0.3s ease" }}
+            />
+          </TransitionLink>
 
           <ul className="flex items-center gap-8">
             {HERO_INLINE_LINKS.map((link) => (
               <li key={link.label}>
-                <a
-                  href={link.href}
+                <TransitionLink
+                  to={link.href}
                   style={{
                     fontFamily:    "'Inter', sans-serif",
                     fontSize:      "11px",
@@ -235,107 +240,109 @@ export default function Navbar() {
                   onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                 >
                   {link.label}
-                </a>
+                </TransitionLink>
               </li>
             ))}
           </ul>
 
-<a href="/contact" >
-          <button
-            style={{
-              ...btnBase,
-              background: btnBg,
-              color:      btnColor,
-              padding:    "10px 20px",
-              display:    "flex",
-              alignItems: "center",
-              gap:        "8px",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = btnHoverBg)}
-            onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
-          >
-            <span style={{ width: 28, height: 28, borderRadius: "30px", overflow: "hidden", flexShrink: 0 }}>
-              <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            </span>
-            LET'S TALK
-          </button>
-          </a>
-        </div>
-
-        {/* ── COMPACT layout ── */}
-        {/* ── COMPACT layout ── */}
-<div
-  className="items-center justify-between px-8 py-5"  // ← remove "flex" from here
-  style={{
-    display:       isHero ? "none" : "flex",   // ← ADD as first style line
-    position:      isHero ? "absolute" : "relative",
-    top: 0, left: 0, right: 0,
-    opacity:       isHero ? 0 : 1,
-    pointerEvents: isHero ? "none" : "auto",
-    transform:     isHero ? "translateY(10px)" : "translateY(0)",
-    transition:    "opacity 0.35s ease, transform 0.35s ease",
-  }}
->
-          <img
-            src={Logo}
-            alt="Logo"
-            className="h-8 w-auto select-none"
-            style={{ filter: logoFilter, transition: "filter 0.3s ease" }}
-          />
-
-          {/* MENU button */}
-          <button
-  onClick={() => setOpen(true)}
-  style={{
-    ...btnBase,
-    background:    btnBg,
-    color:         btnColor,
-    padding:       "10px 16px 10px 20px",
-    opacity:       open ? 0 : 1,
-    pointerEvents: open ? "none" : "auto",
-    display:       "flex",
-    alignItems:    "center",
-    gap:           "10px",
-  }}
-  onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = btnHoverBg; }}
-  onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
-  aria-label="Open menu"
->
-  MENU
-  {/* Hamburger icon */}
-  <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
-    <line x1="0" y1="1"  x2="18" y2="1"  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-    <line x1="0" y1="7"  x2="18" y2="7"  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-    <line x1="0" y1="13" x2="18" y2="13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-  </svg>
-</button>
-          {/* Right slot: LET'S TALK ↔ CLOSE */}
-          <div style={{ position: "relative", height: "46px", minWidth: "150px" }}>
-            {/* LET'S TALK */}
-          <a href="/contact" >
+          <TransitionLink to="/contact">
             <button
               style={{
                 ...btnBase,
-                position:      "absolute",
-                inset:         0,
-                background:    btnBg,
-                color:         btnColor,
-                display:       "flex",
-                alignItems:    "center",
-                gap:           "8px",
-                padding:       "0 20px",
-                opacity:       open ? 0 : 1,
-                pointerEvents: open ? "none" : "auto",
+                background: btnBg,
+                color:      btnColor,
+                padding:    "10px 20px",
+                display:    "flex",
+                alignItems: "center",
+                gap:        "8px",
               }}
-              onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = btnHoverBg; }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = btnHoverBg)}
               onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
             >
-              <span style={{ width: 28, height: 28, borderRadius: "10%", overflow: "hidden", flexShrink: 0 }}>
+              <span style={{ width: 28, height: 28, borderRadius: "30px", overflow: "hidden", flexShrink: 0 }}>
                 <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </span>
               LET'S TALK
             </button>
-            </a>
+          </TransitionLink>
+        </div>
+
+        {/* ── COMPACT layout ── */}
+        <div
+          className="items-center justify-between px-8 py-5"
+          style={{
+            display:       isHero ? "none" : "flex",
+            position:      isHero ? "absolute" : "relative",
+            top: 0, left: 0, right: 0,
+            opacity:       isHero ? 0 : 1,
+            pointerEvents: isHero ? "none" : "auto",
+            transform:     isHero ? "translateY(10px)" : "translateY(0)",
+            transition:    "opacity 0.35s ease, transform 0.35s ease",
+          }}
+        >
+          <TransitionLink to="/">
+            <img
+              src={Logo}
+              alt="Logo"
+              className="h-8 w-auto select-none"
+              style={{ filter: logoFilter, transition: "filter 0.3s ease" }}
+            />
+          </TransitionLink>
+
+          {/* MENU button */}
+          <button
+            onClick={() => setOpen(true)}
+            style={{
+              ...btnBase,
+              background:    btnBg,
+              color:         btnColor,
+              padding:       "10px 16px 10px 20px",
+              opacity:       open ? 0 : 1,
+              pointerEvents: open ? "none" : "auto",
+              display:       "flex",
+              alignItems:    "center",
+              gap:           "10px",
+            }}
+            onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = btnHoverBg; }}
+            onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
+            aria-label="Open menu"
+          >
+            MENU
+            {/* Hamburger icon */}
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+              <line x1="0" y1="1"  x2="18" y2="1"  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="0" y1="7"  x2="18" y2="7"  stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="0" y1="13" x2="18" y2="13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
+          </button>
+
+          {/* Right slot: LET'S TALK ↔ CLOSE */}
+          <div style={{ position: "relative", height: "46px", minWidth: "150px" }}>
+            {/* LET'S TALK */}
+            <TransitionLink to="/contact">
+              <button
+                style={{
+                  ...btnBase,
+                  position:      "absolute",
+                  inset:         0,
+                  background:    btnBg,
+                  color:         btnColor,
+                  display:       "flex",
+                  alignItems:    "center",
+                  gap:           "8px",
+                  padding:       "0 20px",
+                  opacity:       open ? 0 : 1,
+                  pointerEvents: open ? "none" : "auto",
+                }}
+                onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = btnHoverBg; }}
+                onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
+              >
+                <span style={{ width: 28, height: 28, borderRadius: "10%", overflow: "hidden", flexShrink: 0 }}>
+                  <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </span>
+                LET'S TALK
+              </button>
+            </TransitionLink>
 
             {/* CLOSE ✕ — always black/white regardless of section */}
             <button
@@ -384,10 +391,10 @@ export default function Navbar() {
           <ul className="flex flex-col items-center" style={{ gap: "0.05em" }}>
             {NAV_LINKS.map((link, i) => (
               <li key={link.label} style={{ overflow: "hidden" }}>
-                <a
+                <TransitionLink
                   ref={(el) => (linksRef.current[i] = el)}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
+                  to={link.href}
+                  onClick={() => {  setTimeout(() => setOpen(false), COVER_MS)}}
                   style={{
                     display:        "block",
                     fontFamily:     "'Bebas Neue', sans-serif",
@@ -403,7 +410,7 @@ export default function Navbar() {
                   onMouseLeave={(e) => (e.currentTarget.style.color = "black")}
                 >
                   {link.label}
-                </a>
+                </TransitionLink>
               </li>
             ))}
           </ul>

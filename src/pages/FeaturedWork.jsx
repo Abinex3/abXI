@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Project1 from '../assets/projects/project1.jpeg';
 import Project2 from '../assets/projects/project2.jpeg';
 import Project3 from '../assets/projects/project3.jpeg';
+import TransitionLink from "../components/TransitionLink";
 
 const projects = [
   {
@@ -40,29 +41,56 @@ export default function FeaturedWork() {
   const [cardProgress, setCardProgress] = useState(projects.map(() => 0));
 
   useEffect(() => {
-    const handleScroll = () => {
-      const newProgress = projects.map((_, i) => {
+  let rafId = null;
+
+  const compute = () => {
+    rafId = null;
+    const windowH = window.innerHeight;
+
+    setCardProgress((prev) => {
+      let changed = false;
+      const next = projects.map((_, i) => {
         const card = cardsRef.current[i];
         const nextCard = cardsRef.current[i + 1];
         if (!card || !nextCard) return 0;
 
         const nextTop = nextCard.getBoundingClientRect().top;
-        const windowH = window.innerHeight;
         const stickyOffset = 60 + (i + 1) * 24;
         const progress = Math.max(
           0,
           Math.min(1, (windowH - nextTop - stickyOffset) / (windowH * 0.5))
         );
+        // skip re-render if essentially unchanged (rounded)
+        if (Math.abs(progress - prev[i]) > 0.004) changed = true;
         return progress;
       });
-      setCardProgress(newProgress);
-    };
+      return changed ? next : prev; // bail out → no re-render
+    });
+  };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // only schedule one RAF per frame, no matter how many scroll events fire
+  const onScroll = () => {
+    if (rafId === null) rafId = requestAnimationFrame(compute);
+  };
 
+  // Prefer Lenis's own scroll event (synced with its RAF loop)
+  const lenis = window.lenis;
+  if (lenis && lenis.on) {
+    lenis.on("scroll", onScroll);
+  } else {
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  compute(); // initial
+
+  return () => {
+    if (rafId) cancelAnimationFrame(rafId);
+    if (lenis && lenis.off) lenis.off("scroll", onScroll);
+    else window.removeEventListener("scroll", onScroll);
+  };
+}, []);
+
+ 
   return (
     <section
       ref={sectionRef}
@@ -257,8 +285,7 @@ export default function FeaturedWork() {
                         transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
                       }}
                     >
-                      <a
-                        href={`/work/${p.id}`}
+                      <TransitionLink to={`/work/${p.id}`}
                         style={{
                           display: "inline-flex",
                           alignItems: "center",
@@ -283,7 +310,7 @@ export default function FeaturedWork() {
                         }}
                       >
                         VIEW PROJECT →
-                      </a>
+                      </TransitionLink>
                     </div>
                   </div>
                 </div>

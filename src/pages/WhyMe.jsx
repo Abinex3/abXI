@@ -226,6 +226,7 @@ export default function WhyMe() {
         //    the stray second scrollbar while still hiding the bike/trail that
         //    extend beyond the edges.
         overflow: "clip",
+        minHeight: "320vh",  
       }}
     >
       {/* ════════════ LEFT COLUMN ════════════ */}

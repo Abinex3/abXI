@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTransition } from "../../components/TransitionProvider"; 
+
 
 
 export default function ProjectCard({ project }) {
+  const { navigateWithTransition } = useTransition();
     const navigate = useNavigate();
   const isFeatured = project.featured;
   const screenshots = project.screenshots || [];
@@ -26,19 +29,19 @@ export default function ProjectCard({ project }) {
 
   return (
     <div
-      className="project-card"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-       onClick={() => navigate(`/work/${project.id}`)}
-      style={{
-        gridColumn: isFeatured ? "span 2" : "span 1",
-        gridRow: "span 1",
-        position: "relative",
-        cursor: "pointer",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+  className="project-card"
+  onMouseEnter={() => setHovered(true)}
+  onMouseLeave={() => setHovered(false)}
+  onClick={() => navigateWithTransition(`/work/${project.id}`)}
+  style={{
+    gridColumn: isFeatured ? "span 2" : "span 1",
+    gridRow: "span 1",
+    position: "relative",
+    cursor: "pointer",
+    display: "flex",
+    flexDirection: "column",
+  }}
+>
       {/* Image */}
       <div
         style={{
