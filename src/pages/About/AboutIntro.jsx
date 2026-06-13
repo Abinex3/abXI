@@ -1,8 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // ── Google Fonts (add to your index.html <head> if not already present) ───────
 // <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 // ─────────────────────────────────────────────────────────────────────────────
+
+const MOBILE_BREAKPOINT = 768; // below this → tighter spacing so it follows the cards
 
 // ── Brand colours ─────────────────────────────────────────────────────────────
 const C_BG      = "#e05a30"; // background
@@ -38,6 +40,17 @@ function Grain() {
 export default function AboutIntro() {
   const sectionRef = useRef(null);
 
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -61,14 +74,17 @@ export default function AboutIntro() {
       style={{
         position: "relative",
         width: "100%",
-        minHeight: "56vh",
+        // DESKTOP: 56vh tall, content vertically centered (unchanged).
+        // MOBILE: no forced height — sits directly after the cards.
+        minHeight: isMobile ? "auto" : "56vh",
         background: C_BG,
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "80px 6vw 72px",
+        // MOBILE: much less top padding so the ABOUT block follows the cards.
+        padding: isMobile ? "24px 6vw 56px" : "80px 6vw 72px",
       }}
     >
       <Grain />
@@ -96,13 +112,13 @@ export default function AboutIntro() {
         data-reveal
         style={{
           fontFamily: "'DM Sans', sans-serif",
-          fontSize: "clamp(13px, 1.1vw, 16px)",
+          fontSize: isMobile ? "14px" : "clamp(13px, 1.1vw, 16px)",
           fontWeight: 400,
           lineHeight: 1.75,
           color: C_SUB,
           textAlign: "center",
           maxWidth: 480,
-          margin: "28px 0 0",
+          margin: isMobile ? "20px 0 0" : "28px 0 0",
           position: "relative",
           zIndex: 10,
         }}

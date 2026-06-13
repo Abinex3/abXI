@@ -7,16 +7,17 @@ import gsap from "gsap";
 
 const NAV_LINKS = [
   { label: "HOME",     href: "/"     },
-  { label: "PROJECTS", href: "/work" },
-  { label: "MY STACK", href: "/stack"    },
   { label: "ABOUT",    href: "/about"    },
+  { label: "PROJECTS", href: "/work" },
+  { label: "BLOGS", href: "/stack"    },
   { label: "CONTACT",  href: "/contact"  },
 ];
 
 const HERO_INLINE_LINKS = [
   { label: "PROJECTS", href: "/work" },
-  { label: "MY STACK", href: "/stack"    },
   { label: "ABOUT",    href: "/about"    },
+  { label: "BLOGS", href: "/stack"    },
+  
 ];
 
 const COVER_MS = 1000; // must match TransitionProvider

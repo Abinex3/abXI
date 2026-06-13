@@ -1,8 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // ── Google Fonts (add to your index.html <head> if not already present) ───────
 // <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 // ─────────────────────────────────────────────────────────────────────────────
+
+const MOBILE_BREAKPOINT = 768; // below this → full-width single column
 
 // ── Brand colours ─────────────────────────────────────────────────────────────
 const C_BG = "#e05a30";
@@ -52,6 +54,17 @@ function ScriptUnderline() {
 export default function AboutStory() {
   const sectionRef = useRef(null);
 
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -88,7 +101,8 @@ export default function AboutStory() {
         width: "100%",
         background: C_BG,
         overflow: "hidden",
-        padding: "100px 6vw 120px",
+        // DESKTOP padding unchanged. MOBILE: tighter.
+        padding: isMobile ? "60px 6vw 80px" : "100px 6vw 120px",
       }}
     >
       <Grain />
@@ -100,7 +114,7 @@ export default function AboutStory() {
           display: "flex",
           alignItems: "center",
           gap: 16,
-          marginBottom: 72,
+          marginBottom: isMobile ? 48 : 72,
           position: "relative",
           zIndex: 10,
         }}
@@ -126,7 +140,7 @@ export default function AboutStory() {
         data-reveal
         style={{
           textAlign: "center",
-          marginBottom: 90,
+          marginBottom: isMobile ? 56 : 90,
           position: "relative",
           zIndex: 10,
         }}
@@ -194,14 +208,16 @@ export default function AboutStory() {
         </div>
       </div>
 
-      {/* ── Story body — asymmetric two-column ── */}
+      {/* ── Story body — asymmetric two-column ──
+          DESKTOP: 1fr 1.5fr (Nokia model | text) — unchanged.
+          MOBILE: single column, everything full width (model on top, text below). */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1.5fr",
-          gap: "0 7vw",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1.5fr",
+          gap: isMobile ? "32px 0" : "0 7vw",
           maxWidth: 1020,
-          margin: "0 auto 80px",
+          margin: isMobile ? "0 auto 56px" : "0 auto 80px",
           position: "relative",
           zIndex: 10,
           alignItems: "start",
@@ -214,7 +230,10 @@ export default function AboutStory() {
 <div
   style={{
     width: "100%",
-    aspectRatio: "3 / 4",
+    // DESKTOP: tall 3/4 portrait frame. MOBILE: shorter so it doesn't dominate.
+    aspectRatio: isMobile ? "4 / 3" : "3 / 4",
+    maxWidth: isMobile ? 420 : "none",
+    margin: isMobile ? "0 auto" : "0",
     borderRadius: 8,
     overflow: "hidden",
     marginBottom: 24,

@@ -6,7 +6,7 @@ const MOBILE_BREAKPOINT = 768; // below this → stacked, left-aligned, tighter 
 const NAV_LINKS = [
   { label: "Work",    href: "/work"    },
   { label: "About",   href: "/about"   },
-  { label: "Stack",  href: "/stack"  },
+  { label: "Blogs",  href: "/stack"  },
   { label: "Contact", href: "/contact" },
 ];
 
