@@ -3,11 +3,24 @@ import TransitionLink from "../components/TransitionLink";
 
 const EMAIL = "abxidev@gmail.com";
 
+const MOBILE_BREAKPOINT = 768; // below this → drop the forced full-screen height
+
 export default function ContactSection() {
   const sectionRef = useRef(null);
   const headlineRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [hovered, setHovered] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   // Fade-in on enter
   useEffect(() => {
@@ -34,7 +47,9 @@ export default function ContactSection() {
       ref={sectionRef}
       style={{
         background: "#111",
-        minHeight: "100vh",
+        // DESKTOP: full-screen height (unchanged).
+        // MOBILE: no forced height — section sizes to its content.
+        minHeight: isMobile ? "auto" : "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

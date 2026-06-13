@@ -1,5 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 
+const MOBILE_BREAKPOINT = 768; // below this → single column, no sticky title
+
 function Reveal({ children, delay = 0 }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -34,6 +36,17 @@ function Reveal({ children, delay = 0 }) {
 }
 
 export default function ProjectDetailInfo({ info }) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   if (!info) return null;
 
   // Overview-only projects (Jaya, Sea-See) vs full projects (EBD, Infraconsoft)
@@ -51,21 +64,29 @@ export default function ProjectDetailInfo({ info }) {
     <section
       style={{
         backgroundColor: "#e8e0d5",
-        padding: "200px 48px 100px", // extra top space
+        // DESKTOP padding unchanged. MOBILE: less top space + tighter sides.
+        padding: isMobile ? "100px 20px 60px" : "200px 48px 100px", // extra top space
       }}
     >
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "80px",
+          // DESKTOP: two columns. MOBILE: single column.
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          gap: isMobile ? "40px" : "80px",
           maxWidth: "1600px",
           margin: "0 auto",
           alignItems: "start",
         }}
       >
-        {/* Left — label + title */}
-        <div style={{ position: "sticky", top: "120px", alignSelf: "start" }}>
+        {/* Left — label + title (sticky on desktop only) */}
+        <div
+          style={{
+            position: isMobile ? "static" : "sticky",
+            top: isMobile ? "auto" : "120px",
+            alignSelf: "start",
+          }}
+        >
           <span
             style={{
               fontFamily: "'Inter', sans-serif",
@@ -82,7 +103,8 @@ export default function ProjectDetailInfo({ info }) {
             style={{
               fontSize: "clamp(56px, 7vw, 110px)",
               lineHeight: 0.95,
-              margin: "60px 0 0",
+              // MOBILE: less gap under the INFO label.
+              margin: isMobile ? "24px 0 0" : "60px 0 0",
             }}
           >
             <span

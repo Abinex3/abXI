@@ -126,9 +126,11 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Portrait */}
+        {/* Portrait
+            DESKTOP: width clamp(260px, 38vw, 560px) — unchanged.
+            MOBILE (<768px): bigger, fills more of the screen width. */}
         <div
-          className="hero-img absolute bottom-0 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+          className="hero-img absolute bottom-0 left-1/2 -translate-x-1/2 z-20 pointer-events-none hero-portrait"
           style={{
             width: "clamp(260px, 38vw, 560px)",
             transition: "transform 0.15s ease-out",
@@ -145,7 +147,8 @@ export default function HeroSection() {
           />
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar — paragraph shows on all devices.
+            The "SCROLL TO SEE THE PROOF" span is desktop-only (hidden on mobile). */}
         <div
           className="relative z-30 flex items-end justify-between px-8 pb-7"
           style={{
@@ -162,7 +165,7 @@ export default function HeroSection() {
             <br />I close that gap — fast, clean, and built to last.
           </p>
           <span
-            className="text-xs font-semibold tracking-widest text-black/70 pb-1"
+            className="hidden md:inline text-xs font-semibold tracking-widest text-black/70 pb-1"
             style={{ fontFamily: "'Inter', sans-serif" }}
           >
             (SCROLL TO SEE THE PROOF)
@@ -179,6 +182,15 @@ export default function HeroSection() {
           backgroundSize: "160px",
         }}
       />
+
+      {/* Mobile-only portrait sizing — does not affect desktop (≥768px). */}
+      <style>{`
+        @media (max-width: 767px) {
+          .hero-portrait {
+            width: min(105vw, 540px) !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

@@ -1,6 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import BikeImg from "../assets/bike.png";
 import FireGif from "../assets/fire.gif";
+
+const MOBILE_BREAKPOINT = 768; // below this → hide bike animation, single centered column
 
 const reasons = [
   {
@@ -117,7 +119,21 @@ export default function WhyMe() {
   const itemsRef    = useRef([]);
   const rafRef      = useRef(null);
 
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+
   useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    // ── MOBILE: bike animation is hidden, so skip all the scroll/RAF work. ──
+    if (isMobile) return;
+
     const section  = sectionRef.current;
     const bikeWrap = bikeWrapRef.current;
     const canvas   = canvasRef.current;
@@ -187,7 +203,7 @@ export default function WhyMe() {
       window.removeEventListener("scroll", onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     const observers = itemsRef.current.map((el) => {
@@ -219,25 +235,35 @@ export default function WhyMe() {
         fontFamily: "'Inter', sans-serif",
         position: "relative",
         display: "grid",
-        gridTemplateColumns: "55% 45%",
+        // DESKTOP: 55% / 45% two-column with the bike lane on the right.
+        // MOBILE: single column (the bike lane is removed).
+        gridTemplateColumns: isMobile ? "1fr" : "55% 45%",
         alignItems: "start",
         // ✅ FIX: clip overflow on the section block itself. `clip` does NOT
         //    create a scroll container (unlike `hidden`/`auto`), so it removes
         //    the stray second scrollbar while still hiding the bike/trail that
         //    extend beyond the edges.
         overflow: "clip",
-        minHeight: "320vh",  
+        // DESKTOP keeps the tall 320vh scroll track the animation needs.
+        // MOBILE: no animation, so let height be natural (auto).
+        minHeight: isMobile ? "auto" : "320vh",
       }}
     >
       {/* ════════════ LEFT COLUMN ════════════ */}
       <div
         style={{
-          padding: "8rem 3rem 8rem 4rem",
+          // DESKTOP padding unchanged. MOBILE: tighter, centered.
+          padding: isMobile ? "5rem 1.5rem 5rem 1.5rem" : "8rem 3rem 8rem 4rem",
           position: "relative",
           zIndex: 2,
         }}
       >
-        <div style={{ marginBottom: "6rem" }}>
+        <div
+          style={{
+            marginBottom: "6rem",
+            textAlign: isMobile ? "center" : "left",
+          }}
+        >
           <p
             style={{
               fontSize: "0.7rem",
@@ -273,7 +299,14 @@ export default function WhyMe() {
           </h2>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "5.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "5.5rem",
+            alignItems: isMobile ? "center" : "stretch",
+          }}
+        >
           {reasons.map((r, i) => (
             <div
               key={i}
@@ -282,6 +315,8 @@ export default function WhyMe() {
                 opacity: 0,
                 transform: "translateY(28px)",
                 transition: `opacity 0.65s ease ${i * 0.08}s, transform 0.65s ease ${i * 0.08}s`,
+                textAlign: isMobile ? "center" : "left",
+                maxWidth: isMobile ? "480px" : "none",
               }}
             >
               <p
@@ -313,6 +348,9 @@ export default function WhyMe() {
                   height: "1.5px",
                   background: "#e03a1e",
                   marginBottom: "1.1rem",
+                  // center the little red rule on mobile
+                  marginLeft: isMobile ? "auto" : "0",
+                  marginRight: isMobile ? "auto" : "0",
                 }}
               />
               <p
@@ -321,6 +359,9 @@ export default function WhyMe() {
                   lineHeight: 1.85,
                   color: "#00000068",
                   maxWidth: "460px",
+                  // keep the centered paragraph from going edge-to-edge oddly
+                  marginLeft: isMobile ? "auto" : "0",
+                  marginRight: isMobile ? "auto" : "0",
                 }}
               >
                 {r.body}
@@ -330,72 +371,78 @@ export default function WhyMe() {
         </div>
       </div>
 
-      {/* ════════════ RIGHT COLUMN — sticky lane ════════════ */}
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* ════════════ CANVAS TRAIL ════════════ */}
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          pointerEvents: "none",
-          zIndex: 1,
-          opacity: 0,                      // start hidden; scroll handler reveals it
-          transition: "opacity 0.3s ease", // smooth fade for the surprise reveal
-        }}
-      />
-
-      {/* ════════════ BIKE ════════════ */}
-      <div
-        ref={bikeWrapRef}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "220px",
-          pointerEvents: "none",
-          zIndex: 10,
-          transformOrigin: "110px 200px",
-          willChange: "transform, opacity",
-          opacity: 0,                      // start hidden so it doesn't sit parked at top
-          transition: "opacity 0.35s ease",// smooth pop-in once scrolled into view
-        }}
-      >
-        <img
-          src={FireGif}
-          alt=""
+      {/* ════════════ RIGHT COLUMN — sticky lane (DESKTOP ONLY) ════════════ */}
+      {!isMobile && (
+        <div
           style={{
-            width: "70px",
-            position: "absolute",
-            right: "-10px",
-            left: "auto",
-            bottom: "10px",
-            transform: "scaleX(-2)",
-            zIndex: 9,
+            position: "sticky",
+            top: 0,
+            height: "100vh",
             pointerEvents: "none",
           }}
         />
-        <img
-          src={BikeImg}
-          alt="Bike rider"
+      )}
+
+      {/* ════════════ CANVAS TRAIL (DESKTOP ONLY) ════════════ */}
+      {!isMobile && (
+        <canvas
+          ref={canvasRef}
           style={{
-            width: "220px",
-            display: "block",
-            position: "relative",
-            zIndex: 10,
-            transform: "scaleX(-1)",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            pointerEvents: "none",
+            zIndex: 1,
+            opacity: 0,                      // start hidden; scroll handler reveals it
+            transition: "opacity 0.3s ease", // smooth fade for the surprise reveal
           }}
         />
-      </div>
+      )}
+
+      {/* ════════════ BIKE (DESKTOP ONLY) ════════════ */}
+      {!isMobile && (
+        <div
+          ref={bikeWrapRef}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "220px",
+            pointerEvents: "none",
+            zIndex: 10,
+            transformOrigin: "110px 200px",
+            willChange: "transform, opacity",
+            opacity: 0,                      // start hidden so it doesn't sit parked at top
+            transition: "opacity 0.35s ease",// smooth pop-in once scrolled into view
+          }}
+        >
+          <img
+            src={FireGif}
+            alt=""
+            style={{
+              width: "70px",
+              position: "absolute",
+              right: "-10px",
+              left: "auto",
+              bottom: "10px",
+              transform: "scaleX(-2)",
+              zIndex: 9,
+              pointerEvents: "none",
+            }}
+          />
+          <img
+            src={BikeImg}
+            alt="Bike rider"
+            style={{
+              width: "220px",
+              display: "block",
+              position: "relative",
+              zIndex: 10,
+              transform: "scaleX(-1)",
+            }}
+          />
+        </div>
+      )}
     </section>
   );
 }

@@ -1,6 +1,21 @@
 // ProjectShowcase.jsx
 import { useRef, useEffect, useState } from "react";
 
+const MOBILE_BREAKPOINT = 768; // below this → single column, no sticky title
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return isMobile;
+}
+
 function Reveal({ children, y = 60, delay = 0 }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -53,6 +68,7 @@ function FramedShot({ src, alt }) {
 }
 
 export default function ProjectShowcase({ project, quote, features }) {
+  const isMobile = useIsMobile();
   const screenshots = project.screenshots || [];
   const firstTwo = screenshots.slice(0, 2);
   const remaining = screenshots.slice(2);
@@ -61,7 +77,8 @@ export default function ProjectShowcase({ project, quote, features }) {
     <section
       style={{
         backgroundColor: "#e8e0d5",
-        padding: "100px 48px",
+        // DESKTOP padding unchanged. MOBILE: tighter sides + less top/bottom.
+        padding: isMobile ? "60px 20px" : "100px 48px",
       }}
     >
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
@@ -85,8 +102,9 @@ export default function ProjectShowcase({ project, quote, features }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              minHeight: "70vh",
-              padding: "0 24px",
+              // MOBILE: shorter so it doesn't waste a whole screen.
+              minHeight: isMobile ? "40vh" : "70vh",
+              padding: isMobile ? "60px 8px" : "0 24px",
             }}
           >
             <Reveal y={40}>
@@ -126,14 +144,21 @@ export default function ProjectShowcase({ project, quote, features }) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "80px",
+              // DESKTOP: two columns (title | list). MOBILE: single column.
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+              gap: isMobile ? "40px" : "80px",
               alignItems: "start",
-              marginTop: "clamp(140px, 16vw, 240px)",
+              marginTop: isMobile ? "80px" : "clamp(140px, 16vw, 240px)",
             }}
           >
-            {/* Left — sticky title */}
-            <div style={{ position: "sticky", top: "120px", alignSelf: "start" }}>
+            {/* Left — sticky title (sticky on desktop only) */}
+            <div
+              style={{
+                position: isMobile ? "static" : "sticky",
+                top: isMobile ? "auto" : "120px",
+                alignSelf: "start",
+              }}
+            >
               <span
                 style={{
                   fontFamily: "'Inter', sans-serif",
@@ -150,7 +175,8 @@ export default function ProjectShowcase({ project, quote, features }) {
                 style={{
                   fontSize: "clamp(56px, 7vw, 110px)",
                   lineHeight: 0.95,
-                  margin: "60px 0 0",
+                  // MOBILE: less gap under the FEATURES label.
+                  margin: isMobile ? "24px 0 0" : "60px 0 0",
                 }}
               >
                 <span
@@ -248,7 +274,7 @@ export default function ProjectShowcase({ project, quote, features }) {
                   maxWidth: "780px",
                   marginLeft: isLeft ? "0" : "auto",
                   marginRight: isLeft ? "auto" : "0",
-                  marginTop: "clamp(140px, 16vw, 240px)",
+                  marginTop: isMobile ? "80px" : "clamp(140px, 16vw, 240px)",
                 }}
               >
                 <FramedShot

@@ -70,6 +70,7 @@ export const projects = [
     category: "WORK",
     year: "2023",
     featured: false,
+quote: '"Care, made accessible to everyone."',
     image: Img2,
     screenshots: [Jaya1, Jaya2, Jaya3, Jaya4, Jaya5],
     info: {

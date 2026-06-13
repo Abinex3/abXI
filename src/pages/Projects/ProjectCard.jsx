@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTransition } from "../../components/TransitionProvider"; 
 
-
+const MOBILE_BREAKPOINT = 768; // below this → one card per row, no span-2
 
 export default function ProjectCard({ project }) {
   const { navigateWithTransition } = useTransition();
@@ -14,6 +14,17 @@ export default function ProjectCard({ project }) {
   const [hovered, setHovered] = useState(false);
   const [index, setIndex] = useState(0);
   const intervalRef = useRef(null);
+
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     if (hovered && hasShots) {
@@ -34,7 +45,9 @@ export default function ProjectCard({ project }) {
   onMouseLeave={() => setHovered(false)}
   onClick={() => navigateWithTransition(`/work/${project.id}`)}
   style={{
-    gridColumn: isFeatured ? "span 2" : "span 1",
+    // DESKTOP: featured cards span 2 columns (unchanged).
+    // MOBILE: every card spans a single column → one card per row.
+    gridColumn: isMobile ? "span 1" : (isFeatured ? "span 2" : "span 1"),
     gridRow: "span 1",
     position: "relative",
     cursor: "pointer",
@@ -93,7 +106,10 @@ export default function ProjectCard({ project }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              padding: isFeatured ? "90px 140px" : "70px 80px",
+              // MOBILE: tighter inset so screenshots aren't cramped on a full-width card.
+              padding: isMobile
+                ? "50px 50px"
+                : (isFeatured ? "90px 140px" : "70px 80px"),
               opacity: hovered ? 1 : 0,
               transform: hovered ? "scale(1)" : "scale(0.6)",
               transition: "opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -147,13 +163,16 @@ export default function ProjectCard({ project }) {
         </div>
       </div>
 
-      {/* Name (left) + Description (right) - always visible */}
+      {/* Name (left) + Description (right) - always visible
+          DESKTOP: name left, description right (space-between) — unchanged.
+          MOBILE: stack name over description, left-aligned, full-width description. */}
       <div
         style={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           alignItems: "flex-start",
           justifyContent: "space-between",
-          gap: "24px",
+          gap: isMobile ? "10px" : "24px",
           padding: "20px 4px 0",
         }}
       >
@@ -180,8 +199,9 @@ export default function ProjectCard({ project }) {
             color: "#444",
             lineHeight: 1.4,
             margin: 0,
-            textAlign: "right",
-            maxWidth: "55%",
+            // MOBILE: align left under the name and use full width.
+            textAlign: isMobile ? "left" : "right",
+            maxWidth: isMobile ? "100%" : "55%",
           }}
         >
           {project.description}

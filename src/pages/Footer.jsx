@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import TransitionLink from "../components/TransitionLink";
 
+const MOBILE_BREAKPOINT = 768; // below this → stacked, left-aligned, tighter padding
+
 const NAV_LINKS = [
   { label: "Work",    href: "/work"    },
   { label: "About",   href: "/about"   },
@@ -45,6 +47,21 @@ export default function Footer() {
   const [hoveredLink, setHoveredLink] = useState(null);
   const [hoveredSocial, setHoveredSocial] = useState(null);
 
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+  // Mirror isMobile in a ref so the scroll handler (registered once) always
+  // reads the current value without needing to re-subscribe.
+  const isMobileRef = useRef(isMobile);
+  useEffect(() => { isMobileRef.current = isMobile; }, [isMobile]);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   useEffect(() => {
     const footer = footerRef.current;
     const nameEl = nameRef.current;
@@ -60,9 +77,12 @@ export default function Footer() {
         // progress: 0 when footer top hits viewport bottom, 1 when footer is fully visible
         const progress  = Math.max(0, Math.min(1, (winH - rect.top) / (winH + footerH)));
 
-        // Name font-size: starts small (4vw), grows to 18vw as you scroll into footer
-        const minSize   = 4;
-        const maxSize   = 18;
+        // Name font-size: starts small, grows as you scroll into footer.
+        // DESKTOP: 4vw → 18vw (unchanged).
+        // MOBILE: bigger range so the name reads large on a narrow screen.
+        const mobile    = isMobileRef.current;
+        const minSize   = mobile ? 11 : 4;
+        const maxSize   = mobile ? 24 : 18;
         const size      = minSize + (maxSize - minSize) * progress;
         nameEl.style.fontSize = `${size}vw`;
 
@@ -88,29 +108,33 @@ export default function Footer() {
       style={{
         background: "#e8e0d5",
         fontFamily: "'Inter', sans-serif",
-        padding: "5rem 4rem 3rem",
+        // DESKTOP padding unchanged. MOBILE: tighter side padding.
+        padding: isMobile ? "3.5rem 1.5rem 2.5rem" : "5rem 4rem 3rem",
         position: "relative",
         overflow: "hidden",
         borderTop: "1px solid #00000010",
       }}
     >
         <div style={{ position: "relative", zIndex: 1 }}>
-      {/* ── Top row: nav links + social icons ── */}
+      {/* ── Top row: nav links + social icons ──
+          DESKTOP: nav left, social right (space-between).
+          MOBILE: stacked vertically, left-aligned. */}
       <div
         style={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-between",
-          alignItems: "flex-start",
+          alignItems: isMobile ? "flex-start" : "flex-start",
           marginBottom: "4rem",
           flexWrap: "wrap",
-          gap: "2rem",
+          gap: isMobile ? "1.5rem" : "2rem",
         }}
       >
         {/* Nav links */}
         <nav
           style={{
             display: "flex",
-            gap: "2.5rem",
+            gap: isMobile ? "1.5rem" : "2.5rem",
             alignItems: "center",
             flexWrap: "wrap",
           }}
@@ -168,12 +192,14 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── Big scroll-driven name ── */}
+      {/* ── Big scroll-driven name ──
+          DESKTOP: left-aligned (unchanged). MOBILE: centered. */}
       <div
         style={{
           overflow: "hidden",
           marginBottom: "3rem",
           lineHeight: 1,
+          textAlign: isMobile ? "center" : "left",
         }}
       >
         <h2
@@ -188,18 +214,22 @@ export default function Footer() {
             transition: "font-size 0.05s linear, letter-spacing 0.05s linear",
             willChange: "font-size, letter-spacing",
             whiteSpace: "nowrap",
+            // center within the block on mobile (h2 is block-level)
+            display: isMobile ? "inline-block" : "block",
           }}
         >
           ABXI DEV
         </h2>
       </div>
 
-      {/* ── Bottom row: copyright + tagline ── */}
+      {/* ── Bottom row: copyright + tagline ──
+          DESKTOP: space-between row. MOBILE: stacked, left-aligned. */}
       <div
         style={{
           display: "flex",
+          flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: isMobile ? "flex-start" : "center",
           flexWrap: "wrap",
           gap: "1rem",
           borderTop: "1px solid #00000010",

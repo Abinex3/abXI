@@ -21,6 +21,7 @@ const HERO_INLINE_LINKS = [
 
 const COVER_MS = 1000; // must match TransitionProvider
 
+const MOBILE_BREAKPOINT = 768; // ← below this, navbar collapses to logo + MENU
 
 const EMAIL = "abxidev@gmail.com";
 
@@ -71,11 +72,22 @@ export default function Navbar() {
   const [visible, setVisible] = useState(true);
   const [isHero,  setIsHero]  = useState(true);
   const [isDark,  setIsDark]  = useState(false); // ← tracks dark bg sections
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
 
   const overlayRef    = useRef(null);
   const linksRef      = useRef([]);
   const overlayFooter = useRef(null);
   const lastScrollY   = useRef(0);
+
+  /* ── Track viewport width (mobile vs desktop) ── */
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   /* ── Dark section detection via IntersectionObserver ── */
   useEffect(() => {
@@ -188,6 +200,12 @@ export default function Navbar() {
   const btnHoverBg = onDark ? "#e0e0e0" : "#333";
   const logoFilter = onDark ? "invert(1)" : "none"; // flips black SVG logo to white
 
+  // ── Which bar to show ──
+  // DESKTOP: unchanged behaviour — hero bar while in hero, compact bar after.
+  // MOBILE:  always the compact bar (logo + MENU), never the inline-links hero.
+  const showHero    = isHero && !isMobile;
+  const showCompact = !showHero;
+
   return (
     <>
       {/* ════════════════════════════
@@ -200,16 +218,16 @@ export default function Navbar() {
           transition: "transform 0.45s cubic-bezier(0.22,1,0.36,1)",
         }}
       >
-        {/* ── HERO layout ── */}
+        {/* ── HERO layout (DESKTOP ONLY — unchanged) ── */}
         <div
           className="items-center justify-between px-8 py-5"
           style={{
-            display:       isHero ? "flex" : "none",
-            position:      isHero ? "relative" : "absolute",
+            display:       showHero ? "flex" : "none",
+            position:      showHero ? "relative" : "absolute",
             top: 0, left: 0, right: 0,
-            opacity:       isHero ? 1 : 0,
-            pointerEvents: isHero ? "auto" : "none",
-            transform:     isHero ? "translateY(0)" : "translateY(-10px)",
+            opacity:       showHero ? 1 : 0,
+            pointerEvents: showHero ? "auto" : "none",
+            transform:     showHero ? "translateY(0)" : "translateY(-10px)",
             transition:    "opacity 0.35s ease, transform 0.35s ease",
           }}
         >
@@ -267,16 +285,16 @@ export default function Navbar() {
           </TransitionLink>
         </div>
 
-        {/* ── COMPACT layout ── */}
+        {/* ── COMPACT layout (desktop after hero + ALL mobile) ── */}
         <div
-          className="items-center justify-between px-8 py-5"
+          className="items-center justify-between px-5 py-4 md:px-8 md:py-5"
           style={{
-            display:       isHero ? "none" : "flex",
-            position:      isHero ? "absolute" : "relative",
+            display:       showCompact ? "flex" : "none",
+            position:      showCompact ? "relative" : "absolute",
             top: 0, left: 0, right: 0,
-            opacity:       isHero ? 0 : 1,
-            pointerEvents: isHero ? "none" : "auto",
-            transform:     isHero ? "translateY(10px)" : "translateY(0)",
+            opacity:       showCompact ? 1 : 0,
+            pointerEvents: showCompact ? "auto" : "none",
+            transform:     showCompact ? "translateY(0)" : "translateY(10px)",
             transition:    "opacity 0.35s ease, transform 0.35s ease",
           }}
         >
@@ -284,7 +302,7 @@ export default function Navbar() {
             <img
               src={Logo}
               alt="Logo"
-              className="h-8 w-auto select-none"
+              className="h-7 w-auto select-none md:h-8"
               style={{ filter: logoFilter, transition: "filter 0.3s ease" }}
             />
           </TransitionLink>
@@ -316,41 +334,63 @@ export default function Navbar() {
             </svg>
           </button>
 
-          {/* Right slot: LET'S TALK ↔ CLOSE */}
-          <div style={{ position: "relative", height: "46px", minWidth: "150px" }}>
-            {/* LET'S TALK */}
-            <TransitionLink to="/contact">
-              <button
-                style={{
-                  ...btnBase,
-                  position:      "absolute",
-                  inset:         0,
-                  background:    btnBg,
-                  color:         btnColor,
-                  display:       "flex",
-                  alignItems:    "center",
-                  gap:           "8px",
-                  padding:       "0 20px",
-                  opacity:       open ? 0 : 1,
-                  pointerEvents: open ? "none" : "auto",
-                }}
-                onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = btnHoverBg; }}
-                onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
-              >
-                <span style={{ width: 28, height: 28, borderRadius: "10%", overflow: "hidden", flexShrink: 0 }}>
-                  <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                </span>
-                LET'S TALK
-              </button>
-            </TransitionLink>
+          {/* Right slot: LET'S TALK ↔ CLOSE
+              MOBILE: LET'S TALK is hidden, so the bar is just logo + MENU.
+                      The slot collapses to 0 width and only the CLOSE button
+                      (anchored to the right edge) appears while the menu is open.
+              DESKTOP: unchanged — LET'S TALK and CLOSE overlay in a 150px box. */}
+           <div
+            style={{
+              position: isMobile ? "absolute" : "relative",
+              right:    isMobile ? "20px" : "auto",   // matches px-5 padding when open
+              height:   "46px",
+              minWidth: isMobile ? 0 : "150px",
+              width:    isMobile ? "auto" : "auto",
+              // On mobile, take the slot out of flex flow so MENU sits at the right edge.
+              // Only render it in-flow when the overlay is open (CLOSE button needed).
+              display:  isMobile && !open ? "none" : "block",
+            }}
+          >
+            {/* LET'S TALK — desktop only */}
+            {!isMobile && (
+              <TransitionLink to="/contact">
+                <button
+                  style={{
+                    ...btnBase,
+                    position:      "absolute",
+                    inset:         0,
+                    background:    btnBg,
+                    color:         btnColor,
+                    display:       "flex",
+                    alignItems:    "center",
+                    gap:           "8px",
+                    padding:       "0 20px",
+                    opacity:       open ? 0 : 1,
+                    pointerEvents: open ? "none" : "auto",
+                  }}
+                  onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = btnHoverBg; }}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = btnBg)}
+                >
+                  <span style={{ width: 28, height: 28, borderRadius: "10%", overflow: "hidden", flexShrink: 0 }}>
+                    <img src={IMG} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  </span>
+                  LET'S TALK
+                </button>
+              </TransitionLink>
+            )}
 
-            {/* CLOSE ✕ — always black/white regardless of section */}
+            {/* CLOSE ✕ — always black/white regardless of section.
+                Mobile: anchored to the right edge (left:auto) since the slot has no width.
+                Desktop: overlays the LET'S TALK box (inset 0) — unchanged. */}
             <button
               onClick={() => setOpen(false)}
               style={{
                 ...btnBase,
                 position:       "absolute",
-                inset:          0,
+                top:            0,
+                bottom:         0,
+                right:          0,
+                left:           isMobile ? "auto" : 0,
                 background:     "black",
                 color:          "white",
                 display:        "flex",

@@ -1,14 +1,28 @@
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import IMG from "../assets/img.png";
 import TransitionLink from "../components/TransitionLink";
+
+const MOBILE_BREAKPOINT = 768; // below this → stacked layout
 
 export default function About() {
   const polaroidRef = useRef(null);
   const sectionRef = useRef(null);
   const navigate = useNavigate();
 
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   const handleMouseMove = (e) => {
+    if (isMobile) return; // skip the 3D tilt on touch / mobile
     const card = polaroidRef.current;
     const section = sectionRef.current;
     if (!card || !section) return;
@@ -21,6 +35,7 @@ export default function About() {
   };
 
   const handleMouseLeave = () => {
+    if (!polaroidRef.current) return;
     polaroidRef.current.style.transform =
       "rotate(6deg) rotateX(0deg) rotateY(0deg) translate(0,0) scale(1)";
   };
@@ -66,15 +81,17 @@ export default function About() {
 
         <div
           style={{
-            textAlign: "right",
-            paddingRight: "2rem",
+            // DESKTOP: pushed to the right (unchanged).
+            // MOBILE: centered straight below ABOUT.
+            textAlign: isMobile ? "center" : "right",
+            paddingRight: isMobile ? "0" : "2rem",
             marginTop: "0.6rem",
           }}
         >
           <span
             style={{
               fontFamily: "'Caveat', cursive",
-              fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
+              fontSize: isMobile ? "1.4rem" : "clamp(1.2rem, 2vw, 1.8rem)",
               fontStyle: "italic",
               color: "#e03a1e",
               fontWeight: 700,
@@ -85,13 +102,16 @@ export default function About() {
         </div>
       </div>
 
-      {/* Content grid */}
+      {/* Content grid
+          DESKTOP: 3-column grid (1fr auto 1fr) — unchanged.
+          MOBILE: single column, stacked: bio → polaroid → paragraph → CTA. */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr auto 1fr",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr auto 1fr",
+          justifyItems: isMobile ? "center" : "stretch",
           alignItems: "center",
-          gap: "2rem",
+          gap: isMobile ? "2.5rem" : "2rem",
           maxWidth: "1200px",
           margin: "3rem auto 0 auto",
           padding: "0 2rem",
@@ -104,7 +124,8 @@ export default function About() {
               fontSize: "1rem",
               lineHeight: 1.85,
               color: "#00000075",
-              maxWidth: "300px",
+              maxWidth: isMobile ? "420px" : "300px",
+              textAlign: isMobile ? "center" : "left",
             }}
           >
             Hi, I'm Abinesh. A full stack developer building products from zero
@@ -114,13 +135,13 @@ export default function About() {
         </div>
 
         {/* Center — polaroid */}
-        <div style={{ perspective: "900px", cursor: "none" }}>
+        <div style={{ perspective: "900px", cursor: isMobile ? "default" : "none" }}>
           <div
             ref={polaroidRef}
             style={{
               background: "#fff",
               padding: "14px 14px 56px 14px",
-              width: "clamp(240px, 22vw, 340px)",
+              width: isMobile ? "min(72vw, 300px)" : "clamp(240px, 22vw, 340px)",
               boxShadow: "0 32px 80px #00000022",
               transform: "rotate(6deg)",
               transition: "transform 0.2s ease",
@@ -157,8 +178,9 @@ export default function About() {
               fontSize: "1rem",
               lineHeight: 1.85,
               color: "#00000075",
-              maxWidth: "320px",
+              maxWidth: isMobile ? "420px" : "320px",
               marginBottom: "2.5rem",
+              textAlign: isMobile ? "center" : "left",
             }}
           >
             Most developers write code. I build experiences — the kind that
@@ -168,7 +190,14 @@ export default function About() {
           </p>
 
           {/* CTA — handwritten label + arrow + button */}
-          <div style={{ display: "flex", alignItems: "flex-end", gap: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              gap: "1rem",
+              justifyContent: isMobile ? "center" : "flex-start",
+            }}
+          >
             <div style={{ textAlign: "center", marginBottom: "0.5rem" }}>
               <p
                 style={{

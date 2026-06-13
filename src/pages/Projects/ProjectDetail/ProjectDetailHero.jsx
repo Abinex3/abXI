@@ -1,12 +1,24 @@
 import { useState, useEffect } from "react";
 
+const MOBILE_BREAKPOINT = 768; // below this → tighter spacing
+
 export default function ProjectDetailHero({ project }) {
   const [scrollY, setScrollY] = useState(0);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BREAKPOINT : false
+  );
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   // Fade + slight scale as you scroll past the hero
@@ -26,7 +38,8 @@ export default function ProjectDetailHero({ project }) {
         overflow: "hidden",
         background:
           "linear-gradient(to bottom, #e8e0d5 0%, #e8e0d5 45%, #f0a085 75%, #ee5230 100%)",
-        padding: "0 48px",
+        // DESKTOP padding unchanged. MOBILE: tighter sides.
+        padding: isMobile ? "0 20px" : "0 48px",
         textAlign: "center",
       }}
     >
@@ -51,10 +64,11 @@ export default function ProjectDetailHero({ project }) {
       <p
         style={{
           fontFamily: "'Inter', sans-serif",
-          fontSize: "18px",
+          fontSize: isMobile ? "16px" : "18px",
           color: "#1a1a1a",
           lineHeight: 1.5,
-          margin: "120px 0 0",
+          // MOBILE: smaller gap below the giant title.
+          margin: isMobile ? "48px 0 0" : "120px 0 0",
           maxWidth: "640px",
           opacity: fade,
           transform: `translateY(${scrollY * 0.3}px)`,
