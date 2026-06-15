@@ -9,14 +9,15 @@ const NAV_LINKS = [
   { label: "HOME",     href: "/"     },
   { label: "ABOUT",    href: "/about"    },
   { label: "PROJECTS", href: "/work" },
-  { label: "BLOGS", href: "/stack"    },
+  { label: "BLOGS", href: "/blog"    },
   { label: "CONTACT",  href: "/contact"  },
 ];
 
 const HERO_INLINE_LINKS = [
   { label: "PROJECTS", href: "/work" },
   { label: "ABOUT",    href: "/about"    },
-  { label: "BLOGS", href: "/stack"    },
+  { label: "BLOGS", href: "/blog"    },
+  { label: "RESUME", href: "/resume"    },
   
 ];
 
