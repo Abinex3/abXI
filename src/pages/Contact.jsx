@@ -208,12 +208,12 @@ export default function Contact() {
 
           <div className="flex flex-col items-center gap-6">
             {/* Email */}
-            <a href="mailto:abxidev@gmail.com" className="group block text-center">
+            <a href="mailto:abineshmuniyasaamy@gmail.com" className="group block text-center">
               <span className="block text-xs uppercase tracking-widest text-black/45 mb-1">
                 Email
               </span>
               <span className="block text-lg text-black font-medium transition-colors group-hover:text-[#e03a1e]">
-                abxidev@gmail.com
+                abineshmuniyasaamy@gmail.com
               </span>
             </a>
 

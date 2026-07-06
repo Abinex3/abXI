@@ -1,7 +1,7 @@
-import Img1 from "../../assets/projects/project1.jpeg";
-import Img2 from "../../assets/projects/project2.jpeg";
-import Img3 from "../../assets/projects/project3.jpeg";
-import Img4 from "../../assets/projects/project4.jpeg";
+import Img1 from "../../assets/projects/project1.jpg";
+import Img2 from "../../assets/projects/project2.jpg";
+import Img3 from "../../assets/projects/project3.jpg";
+// import Img4 from "../../assets/projects/project4.jpg";
 
 // EBD screenshots
 import Ebd1 from "../../assets/projects/edb/screen-1.png";
@@ -124,7 +124,7 @@ quote: '"Care, made accessible to everyone."',
     category: "PERSONAL",
     year: "2025",
     featured: false,
-    image: Img4,
+    // image,
     screenshots: [],
     info: {
       overview:

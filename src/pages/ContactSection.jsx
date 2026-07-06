@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import TransitionLink from "../components/TransitionLink";
 
-const EMAIL = "abxidev@gmail.com";
+const EMAIL = "abineshmuniyasaamy@gmail.com";
 
 const MOBILE_BREAKPOINT = 768; // below this → drop the forced full-screen height
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import Project1 from '../assets/projects/project1.jpeg';
-import Project2 from '../assets/projects/project2.jpeg';
-import Project3 from '../assets/projects/project3.jpeg';
+import Project1 from '../assets/projects/project1.jpg';
+import Project2 from '../assets/projects/project2.jpg';
+import Project3 from '../assets/projects/project3.jpg';
 import TransitionLink from "../components/TransitionLink";
 
 const projects = [
@@ -41,56 +41,56 @@ export default function FeaturedWork() {
   const [cardProgress, setCardProgress] = useState(projects.map(() => 0));
 
   useEffect(() => {
-  let rafId = null;
+    let rafId = null;
 
-  const compute = () => {
-    rafId = null;
-    const windowH = window.innerHeight;
+    const compute = () => {
+      rafId = null;
+      const windowH = window.innerHeight;
 
-    setCardProgress((prev) => {
-      let changed = false;
-      const next = projects.map((_, i) => {
-        const card = cardsRef.current[i];
-        const nextCard = cardsRef.current[i + 1];
-        if (!card || !nextCard) return 0;
+      setCardProgress((prev) => {
+        let changed = false;
+        const next = projects.map((_, i) => {
+          const card = cardsRef.current[i];
+          const nextCard = cardsRef.current[i + 1];
+          if (!card || !nextCard) return 0;
 
-        const nextTop = nextCard.getBoundingClientRect().top;
-        const stickyOffset = 60 + (i + 1) * 24;
-        const progress = Math.max(
-          0,
-          Math.min(1, (windowH - nextTop - stickyOffset) / (windowH * 0.5))
-        );
-        // skip re-render if essentially unchanged (rounded)
-        if (Math.abs(progress - prev[i]) > 0.004) changed = true;
-        return progress;
+          const nextTop = nextCard.getBoundingClientRect().top;
+          const stickyOffset = 60 + (i + 1) * 24;
+          const progress = Math.max(
+            0,
+            Math.min(1, (windowH - nextTop - stickyOffset) / (windowH * 0.5))
+          );
+          // skip re-render if essentially unchanged (rounded)
+          if (Math.abs(progress - prev[i]) > 0.004) changed = true;
+          return progress;
+        });
+        return changed ? next : prev; // bail out → no re-render
       });
-      return changed ? next : prev; // bail out → no re-render
-    });
-  };
+    };
 
-  // only schedule one RAF per frame, no matter how many scroll events fire
-  const onScroll = () => {
-    if (rafId === null) rafId = requestAnimationFrame(compute);
-  };
+    // only schedule one RAF per frame, no matter how many scroll events fire
+    const onScroll = () => {
+      if (rafId === null) rafId = requestAnimationFrame(compute);
+    };
 
-  // Prefer Lenis's own scroll event (synced with its RAF loop)
-  const lenis = window.lenis;
-  if (lenis && lenis.on) {
-    lenis.on("scroll", onScroll);
-  } else {
-    window.addEventListener("scroll", onScroll, { passive: true });
-  }
+    // Prefer Lenis's own scroll event (synced with its RAF loop)
+    const lenis = window.lenis;
+    if (lenis && lenis.on) {
+      lenis.on("scroll", onScroll);
+    } else {
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
 
-  compute(); // initial
+    compute(); // initial
 
-  return () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    if (lenis && lenis.off) lenis.off("scroll", onScroll);
-    else window.removeEventListener("scroll", onScroll);
-  };
-}, []);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (lenis && lenis.off) lenis.off("scroll", onScroll);
+      else window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
- 
+
   return (
     <section
       ref={sectionRef}
@@ -198,7 +198,7 @@ export default function FeaturedWork() {
                   }}
                 />
 
-                {/* CONTENT */}
+                {/* CONTENT — all text hidden until hover */}
                 <div
                   style={{
                     position: "absolute",
@@ -210,8 +210,17 @@ export default function FeaturedWork() {
                     justifyContent: "space-between",
                   }}
                 >
-                  {/* Top: number + tags — always visible */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+                  {/* Top: number + tags — only on hover */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1.5rem",
+                      opacity: isHovered ? 1 : 0,
+                      transform: isHovered ? "translateY(0)" : "translateY(-10px)",
+                      transition: "opacity 0.4s ease, transform 0.4s ease",
+                    }}
+                  >
                     <span
                       style={{
                         fontFamily: "'Bebas Neue', sans-serif",
@@ -235,8 +244,14 @@ export default function FeaturedWork() {
                     </p>
                   </div>
 
-                  {/* Bottom: title always, desc + button on hover */}
-                  <div>
+                  {/* Bottom: title + desc + button — only on hover */}
+                  <div
+                    style={{
+                      opacity: isHovered ? 1 : 0,
+                      transform: isHovered ? "translateY(0)" : "translateY(14px)",
+                      transition: "opacity 0.4s ease 0.05s, transform 0.4s ease 0.05s",
+                    }}
+                  >
                     <h3
                       style={{
                         fontFamily: "'Bebas Neue', sans-serif",
@@ -246,22 +261,17 @@ export default function FeaturedWork() {
                         lineHeight: 1.0,
                         margin: "0 0 1.5rem 0",
                         maxWidth: "600px",
-                        transform: isHovered ? "translateY(-6px)" : "translateY(0)",
-                        transition: "transform 0.45s ease",
                       }}
                     >
                       {p.title}
                     </h3>
 
-                    {/* Desc — slides up on hover */}
+                    {/* Desc */}
                     <div
                       style={{
                         overflow: "hidden",
                         maxHeight: isHovered ? "120px" : "0px",
-                        opacity: isHovered ? 1 : 0,
-                        transform: isHovered ? "translateY(0)" : "translateY(14px)",
-                        transition:
-                          "max-height 0.45s ease, opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s",
+                        transition: "max-height 0.45s ease",
                       }}
                     >
                       <p
@@ -277,41 +287,33 @@ export default function FeaturedWork() {
                       </p>
                     </div>
 
-                    {/* Button — slides up on hover */}
-                    <div
+                    {/* Button */}
+                    <TransitionLink to={`/work/${p.id}`}
                       style={{
-                        opacity: isHovered ? 1 : 0,
-                        transform: isHovered ? "translateY(0)" : "translateY(10px)",
-                        transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        fontSize: "0.7rem",
+                        fontWeight: 700,
+                        letterSpacing: "0.15em",
+                        color: "#fff",
+                        textDecoration: "none",
+                        border: "1px solid #ffffff40",
+                        padding: "0.75rem 1.75rem",
+                        borderRadius: "2px",
+                        transition: "border-color 0.25s, color 0.25s",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "#e03a1e";
+                        e.currentTarget.style.color = "#e03a1e";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = "#ffffff40";
+                        e.currentTarget.style.color = "#fff";
                       }}
                     >
-                      <TransitionLink to={`/work/${p.id}`}
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                          fontSize: "0.7rem",
-                          fontWeight: 700,
-                          letterSpacing: "0.15em",
-                          color: "#fff",
-                          textDecoration: "none",
-                          border: "1px solid #ffffff40",
-                          padding: "0.75rem 1.75rem",
-                          borderRadius: "2px",
-                          transition: "border-color 0.25s, color 0.25s",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = "#e03a1e";
-                          e.currentTarget.style.color = "#e03a1e";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = "#ffffff40";
-                          e.currentTarget.style.color = "#fff";
-                        }}
-                      >
-                        VIEW PROJECT →
-                      </TransitionLink>
-                    </div>
+                      VIEW PROJECT →
+                    </TransitionLink>
                   </div>
                 </div>
               </div>
@@ -320,7 +322,6 @@ export default function FeaturedWork() {
         })}
       </div>
 
-     
     </section>
   );
 }
