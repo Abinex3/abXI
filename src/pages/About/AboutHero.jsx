@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import IMG1 from "../../assets/about/beach.jpeg";
+import IMG2 from "../../assets/about/book.jpeg";
 
 const MOBILE_BREAKPOINT = 768; // below this → 3 small cards in a row
 
-const PHOTO1 = null;
-const PHOTO2 = null;
+const PHOTO1 = IMG1;
+const PHOTO2 = IMG2;
 const PHOTO3 = null;
 
 const POLAROIDS = [
-  { photo: PHOTO1, rotate: "-12deg", label: "Test",      arrowSide: "right", zIndex: 2 },
-  { photo: PHOTO2, rotate: "4deg",   label: "Barbara", arrowSide: "right", zIndex: 4 },
+  { photo: PHOTO1, rotate: "-12deg", label: "living seaside, no filter needed.",      arrowSide: "right", zIndex: 2 },
+  { photo: PHOTO2, rotate: "4deg",   label: "Currently Reading", arrowSide: "right", zIndex: 4 },
   { photo: PHOTO3, rotate: "-6deg",  label: "My wife", arrowSide: "left",  zIndex: 3 },
 ];
 

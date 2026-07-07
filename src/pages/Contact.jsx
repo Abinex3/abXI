@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import confetti from "canvas-confetti";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function Contact() {
+    usePageTitle("Contact");
   const sectionRef = useRef(null);
   const [ready, setReady] = useState(false);
   const [status, setStatus] = useState(""); // "", "sending", "success", "error"

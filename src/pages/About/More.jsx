@@ -9,9 +9,11 @@ import DayInLife from "../../pages/About/DayInLife";
 import AboutSkills from "../../pages/About/AboutSkills";
 import ContactSection from "../ContactSection";
 import Footer from "../Footer";
+import usePageTitle from "../../hooks/usePageTitle";
 
 
 export default function AboutMore() {
+    usePageTitle("About");
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

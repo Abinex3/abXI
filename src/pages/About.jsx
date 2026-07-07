@@ -128,9 +128,10 @@ export default function About() {
               textAlign: isMobile ? "center" : "left",
             }}
           >
-            Hi, I'm Abinesh. A full stack developer building products from zero
-            to something real — clean code, sharp interfaces, and nothing that
-            embarrasses itself in production.
+            Hi, I'm Abinesh - a friendly chap and web
+designer/developer who loves problem-solving.
+<br/><br/>
+I was born and raised in Rameshwaram (The Bridge Between Myth and Ocean), went on to study Information Technology (Bsc., IT) at the University of Brighton 
           </p>
         </div>
 
@@ -183,10 +184,12 @@ export default function About() {
               textAlign: isMobile ? "center" : "left",
             }}
           >
-            Most developers write code. I build experiences — the kind that
-            loads fast, feels smooth, and makes whoever hired me look good. I'm
-            open to abroad opportunities and freelance work where the bar is
-            high and the problem is real.
+            My mission is to spice up design, stray from 'trends' and inject
+personality into the work I create for brands and induviduals.
+Together we can exit the design 'comfort zone' and blast off into a
+world of daring design.I'm a keen communicator, so expect someone
+who can lead teams, convey big ideas to co-workers and clients, and
+guide projects towards success whatever the weather.
           </p>
 
           {/* CTA — handwritten label + arrow + button */}

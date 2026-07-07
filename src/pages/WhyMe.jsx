@@ -8,27 +8,36 @@ const reasons = [
   {
     number: "01",
     title: "FULL STACK, FRONT TO BACK",
-    body: `I don't hand off at the API — I own the whole thing. Database schema, server logic, UI interactions, deployment. I've built and shipped complete products solo, which means I understand how every layer talks to the next. No gaps, no blame-shifting between "frontend" and "backend".`,
+    body: `I've always wanted to know how the whole thing works, not just my piece of it. So I don't stop at the API - I build the database, the server logic, the UI, and I ship it myself. I've done this solo enough times that I understand how every layer connects to the next. No gaps, no pointing fingers between "frontend" and "backend".`,
   },
   {
     number: "02",
-    title: "I WRITE CODE THAT SHIPS",
-    body: `Clean architecture isn't just something I talk about in interviews. I write code that's readable, maintainable, and won't collapse the moment someone else touches it. I've worked in production codebases where shortcuts cost weeks — I learned that lesson early.`,
+    title: "ERP ONE-MAN-ARMY",
+    body: `I've handled a plefora of complex ERP projects, so I'm used to squeezing out
+ERP's full potential. I started my Webflow journey overlooking the utility of ERP,
+but once I got a taste, I was hooked! From conditional visibility to multi-reference
+fields and Finsweet hacks - I make ERP do the heavy lifting and automate as much
+as possible, so clients can simply upload.`,
   },
   {
     number: "03",
     title: "GSAP & ANIMATION OBSESSED",
-    body: `Most devs slap a fade-in and call it animated. I use GSAP the way it was meant to be used — ScrollTrigger, SplitText, MotionPath. Animation isn't decoration for me, it's a communication tool. If a transition can explain something faster than text, I'll build it that way.`,
+    body: `Most devs slap a fade-in and call it animated. I use GSAP the way it was meant to be used - ScrollTrigger, SplitText, MotionPath. Animation isn't decoration for me, it's a communication tool. If a transition can explain something faster than text, I'll build it that way.`,
   },
   {
     number: "04",
-    title: "PROBLEM SOLVER BY NATURE",
-    body: `"How the hell do I build that?" is my favourite question. I don't freeze when requirements are vague or the problem is genuinely hard — I break it down, prototype fast, and iterate until it works. Debugging at 2am isn't suffering, it's just the job.`,
+    title: "PROBLEM SOLVER AT HEART",
+    body: `As mentioned, I love nothing more than a problem. I need problems to solve to get
+out of bed in the morning... the thing that grips me about Web development,
+especially animation, is the question "How the hell do I do that?" - and then the
+process of achieving it.`,
   },
   {
     number: "05",
-    title: "EASY TO WORK WITH",
-    body: `I communicate clearly, hit deadlines, and won't ghost you mid-project. I ask the right questions before I build so we're not undoing a week of work. Whether you're a founder, a team lead, or another dev — working with me should feel like less stress, not more.`,
+    title: "nice human-being",
+    body: `I do my best to be a positive, kind and accomodating human! That also transfers to
+my work life; I'm a keen communicator, love working with others and helping
+others overcome difficulties (professional or personal).`,
   },
   
 ];

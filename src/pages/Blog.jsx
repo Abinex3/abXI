@@ -2,8 +2,11 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllPosts, getAllTags } from "../lib/posts";
 import { formatDate } from "../lib/format";
+import usePageTitle from "../hooks/usePageTitle";
+
 
 export default function Blog() {
+    usePageTitle("My Blogs");
   const allPosts = useMemo(() => getAllPosts(), []);
   const allTags = useMemo(() => getAllTags(), []);
   const [activeTag, setActiveTag] = useState(null);
