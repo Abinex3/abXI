@@ -1,10 +1,12 @@
 import { useRef, useEffect, useState } from "react";
+import IMG1 from "../../assets/about/book.jpeg";
+import IMG2 from "../../assets/about/workspace.jpeg";
 
 const MOBILE_BREAKPOINT = 768; // below this → smaller cards + shorter section
 
 // ── Swap with your actual imports ─────────────────────────
-const PHOTO1 = null;
-const PHOTO2 = null;
+const PHOTO1 = IMG1;
+const PHOTO2 = IMG2;
 // ─────────────────────────────────────────────────────────
 
 function CurvedArrow({ side, size = 70 }) {
@@ -219,7 +221,7 @@ export default function AboutGallery() {
           <div style={{ display: "flex", flexDirection: "row-reverse", alignItems: "flex-end", gap: 4, marginTop: 12, zIndex: 20, transform: "rotate(6deg)" }}>
             <span style={{ fontFamily: "'Caveat', cursive", fontSize: isMobile ? "0.95rem" : "clamp(1rem, 1.5vw, 1.4rem)",
               color: "rgba(255,255,255,0.92)", fontWeight: 600, lineHeight: 1, whiteSpace: "nowrap" }}>
-              My wife
+              My Workspace
             </span>
             <CurvedArrow side="left" size={isMobile ? 42 : 70} />
           </div>

@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import IMG1 from "../../assets/about/beach.jpeg";
 import IMG2 from "../../assets/about/book.jpeg";
+import IMG3 from "../../assets/about/clg.jpeg";
 
 const MOBILE_BREAKPOINT = 768; // below this → 3 small cards in a row
 
 const PHOTO1 = IMG1;
 const PHOTO2 = IMG2;
-const PHOTO3 = null;
+const PHOTO3 = IMG3;
 
 const POLAROIDS = [
   { photo: PHOTO1, rotate: "-12deg", label: "living seaside, no filter needed.",      arrowSide: "right", zIndex: 2 },
   { photo: PHOTO2, rotate: "4deg",   label: "Currently Reading", arrowSide: "right", zIndex: 4 },
-  { photo: PHOTO3, rotate: "-6deg",  label: "My wife", arrowSide: "left",  zIndex: 3 },
+  { photo: PHOTO3, rotate: "-6deg",  label: "Where My Career started", arrowSide: "left",  zIndex: 3 },
 ];
 
 function CurvedArrow({ side, size = 70 }) {
